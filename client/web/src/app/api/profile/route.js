@@ -1,0 +1,52 @@
+import { endpoints } from "@/utils/endpoints";
+import axios from "axios";
+import { cookies, headers } from "next/headers";
+import { NextResponse } from "next/server";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+export async function GET(request) {
+  const cookieStore = await cookies();
+  let token = cookieStore.get("token")?.value;
+  if (!token) {
+    if (!cookieStore.get("refresh_token")?.value) {
+      return NextResponse.json(
+        { message: "No user logged in" },
+        { status: 200 }
+      );
+    }
+
+    const newTokenData = await axios.get("/api/refresh-token");
+    if (!newTokenData) {
+      cookieStore.delete("token");
+      cookieStore.delete("refresh_token");
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+
+    token = newTokenData.token;
+    cookieStore.set("token", newTokenData.token, {
+      path: "/",
+      expires: new Date(newTokenData.expires),
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+    });
+  }
+
+  try {
+    const res = await axios.get(API_URL + endpoints.profile, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = res.data;
+
+    return NextResponse.json({ user: data }, { status: res.status });
+  } catch (error) {
+    return NextResponse.json(
+      { message: error?.response?.data?.message ?? "Something went wrong" },
+      { status: error.status }
+    );
+  }
+}
