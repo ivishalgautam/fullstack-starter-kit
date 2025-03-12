@@ -1,14 +1,12 @@
 "use client";
-import { createContext, useState, useLayoutEffect } from "react";
-import http from "@/utils/http";
+import { createContext, useState, useLayoutEffect, useContext } from "react";
 import { usePathname } from "next/navigation";
-import { endpoints } from "@/utils/endpoints";
 import axios from "axios";
 
-export const MainContext = createContext(null);
+export const AuthContext = createContext(null);
 
-function AuthProvider({ children }) {
-  const [user, setUser] = useState();
+export default function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
   const [isUserLoading, setIsUserLoading] = useState(true);
   const pathname = usePathname();
 
@@ -17,25 +15,26 @@ function AuthProvider({ children }) {
     async function fetchData() {
       await axios
         .get("/api/profile")
-        .then((data) => {
+        .then(({ data }) => {
           setUser(data);
           setIsUserLoading(false);
-          localStorage.setItem("user", JSON.stringify(data));
+          localStorage.setItem("user", JSON.stringify(data.user));
         })
         .catch((error) => {
+          setUser(null);
           console.log({ error });
           setIsUserLoading(false);
         });
     }
-    if (!["/login"].includes(pathname)) {
-      fetchData();
-    } else {
-      setIsUserLoading(false);
-    }
+    // if (!["/login"].includes(pathname)) {
+    fetchData();
+    // } else {
+    //   setIsUserLoading(false);
+    // }
   }, [pathname]);
 
   return (
-    <MainContext.Provider
+    <AuthContext.Provider
       value={{
         user,
         setUser,
@@ -43,8 +42,14 @@ function AuthProvider({ children }) {
       }}
     >
       {children}
-    </MainContext.Provider>
+    </AuthContext.Provider>
   );
 }
 
-export default AuthProvider;
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+}
