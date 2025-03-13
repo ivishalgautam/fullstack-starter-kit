@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useState, useLayoutEffect, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import axios from "axios";
 
@@ -10,21 +10,22 @@ export default function AuthProvider({ children }) {
   const [isUserLoading, setIsUserLoading] = useState(true);
   const pathname = usePathname();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setIsUserLoading(true);
     async function fetchData() {
-      await axios
-        .get("/api/profile")
-        .then(({ data }) => {
-          setUser(data);
-          setIsUserLoading(false);
-          localStorage.setItem("user", JSON.stringify(data.user));
-        })
-        .catch((error) => {
-          setUser(null);
-          console.log({ error });
-          setIsUserLoading(false);
-        });
+      try {
+        // const user = await http().get(endpoints.profile);
+        const {
+          data: { user },
+        } = await axios.get("/api/profile");
+        setUser(user);
+        localStorage.setItem("user", JSON.stringify(user));
+      } catch (error) {
+        setUser(null);
+        console.log(error);
+      } finally {
+        setIsUserLoading(false);
+      }
     }
     // if (!["/login"].includes(pathname)) {
     fetchData();
@@ -51,5 +52,6 @@ export function useAuth() {
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
+
   return context;
 }

@@ -6,15 +6,14 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // This route acts as a middleware between you and your backend server
 export async function POST(request) {
+  const data = await request.json();
   const cookieStore = await cookies();
-  const formData = await request.formData();
-  const payload = Object.fromEntries(formData.entries());
   try {
     // login request to the original backend
     const res = await fetch(API_URL + endpoints.auth.login, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      body: data.body,
     });
     const json = await res.json();
     if (res.ok) {

@@ -1,19 +1,19 @@
 "use client";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/auth-provider";
 import http from "@/utils/http";
 import { useQuery } from "@tanstack/react-query";
-import { useContext } from "react";
+import Link from "next/link";
 
 export default function Home() {
   const { user, isUserLoading } = useAuth();
-  const { data, isPending, error, isError } = useQuery({
-    queryFn: async () => {
-      return await http().get("/banners");
-    },
+  const { data, isLoading, error, isError } = useQuery({
+    queryFn: async () => http().get("/banners"),
     queryKey: ["banners"],
   });
 
-  if (isPending) return "loading...";
+  if (isLoading) return "loading...";
   if (isError) return error?.message ?? "Something went wrong!";
 
   return (
@@ -24,6 +24,9 @@ export default function Home() {
       ) : (
         <pre>{JSON.stringify(user, null, 2)}</pre>
       )}
+      <Link className={cn(buttonVariants({}))} href={"/products"}>
+        Go to products
+      </Link>
     </div>
   );
 }

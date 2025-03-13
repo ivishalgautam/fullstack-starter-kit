@@ -7,12 +7,11 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function POST(Request) {
   const cookieStore = await cookies();
-  const refresh_token = cookieStore.get("refresh_token").value;
-
+  const refresh_token = cookieStore.get("refresh_token")?.value;
   if (!refresh_token) {
     return NextResponse.json(
       { error: "Refresh token missing" },
-      { status: 400 }
+      { status: 401 }
     );
   }
 
@@ -28,10 +27,7 @@ export async function POST(Request) {
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
     });
-    return NextResponse.json(
-      { message: "success" },
-      { status: response.status }
-    );
+    return NextResponse.json(json, { status: response.status });
   } catch (error) {
     cookieStore.delete("token");
     cookieStore.delete("refresh_token");

@@ -1,4 +1,5 @@
 import { endpoints } from "@/utils/endpoints";
+import http from "@/utils/http";
 import axios from "axios";
 import { cookies, headers } from "next/headers";
 import { NextResponse } from "next/server";
@@ -8,23 +9,26 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export async function GET(request) {
   const cookieStore = await cookies();
   let token = cookieStore.get("token")?.value;
+  const refresh_token = cookieStore.get("refresh_token")?.value;
   if (!token) {
-    if (!cookieStore.get("refresh_token")?.value) {
+    if (!refresh_token) {
       return NextResponse.json(
         { message: "No user logged in" },
-        { status: 200 }
+        { status: 401 }
       );
     }
 
-    const newTokenData = await axios.get("/api/refresh-token");
+    // const newTokenData = await axios.post("/api/refresh-token");
+    const newTokenData = await http().post(endpoints.auth.refresh, {
+      refresh_token,
+    });
     if (!newTokenData) {
       cookieStore.delete("token");
       cookieStore.delete("refresh_token");
       return NextResponse.redirect(new URL("/login", request.url));
     }
-
     token = newTokenData.token;
-    cookieStore.set("token", newTokenData.token, {
+    cookieStore.set("token", token, {
       path: "/",
       expires: new Date(newTokenData.expires),
       httpOnly: true,

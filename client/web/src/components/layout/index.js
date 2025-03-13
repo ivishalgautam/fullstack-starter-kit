@@ -14,12 +14,14 @@ export default function Layout({ children }) {
 
     return (
       <AuthProvider>
-        <QueryProvider>
-          <div className="min-h-[calc(100vh-135px)]">{children}</div>
-        </QueryProvider>
+        <div className="min-h-[calc(100vh-135px)]">{children}</div>
       </AuthProvider>
     );
   };
 
-  return <div className="bg-gray-50 min-h-screen">{getContent()}</div>;
+  return (
+    <div className="bg-gray-50 min-h-screen">
+      <QueryProvider>{getContent()}</QueryProvider>
+    </div>
+  );
 }
