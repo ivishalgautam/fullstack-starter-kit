@@ -122,7 +122,6 @@ const checkUsername = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-  console.log(req.user_data);
   try {
     const record = await table.UserModel.getById(undefined, req.user_data.id);
     if (!record) {

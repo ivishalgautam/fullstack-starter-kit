@@ -127,7 +127,6 @@ const deleteFile = async (req, res) => {
       "../../..",
       req.query.file_path
     );
-    console.log({ publicPath });
     if (fs.existsSync(publicPath)) {
       fs.unlinkSync(publicPath);
       res.send({ message: "File deleted" });

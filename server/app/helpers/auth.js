@@ -25,7 +25,6 @@ function generateRefreshToken(userData) {
 }
 
 const verifyToken = async (req, res) => {
-  console.log(req.headers);
   const authHeader = req.headers["authorization"] ?? req.cookies.token;
   if (!authHeader) {
     res.code(401).send({ message: "unauthorized!" });
