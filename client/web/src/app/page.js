@@ -1,32 +1,29 @@
-"use client";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { useAuth } from "@/providers/auth-provider";
-import http from "@/utils/http";
-import { useQuery } from "@tanstack/react-query";
-import Link from "next/link";
+import Hero from "@/components/hero";
+import ExploreByKeywords from "@/components/explore-by-keywords";
+import ExploreByAuthorities from "@/components/explore-by-authorities";
+import ExploreByStates from "@/components/explore-by-states";
+import Services from "@/components/services";
+import Footer from "@/components/footer";
+import { Suspense } from "react";
 
 export default function Home() {
-  const { user, isUserLoading } = useAuth();
-  const { data, isLoading, error, isError } = useQuery({
-    queryFn: async () => http().get("/banners"),
-    queryKey: ["banners"],
-  });
-
-  if (isLoading) return "loading...";
-  if (isError) return error?.message ?? "Something went wrong!";
-
   return (
-    <div>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-      {isUserLoading ? (
-        "User loading..."
-      ) : (
-        <pre>{JSON.stringify(user, null, 2)}</pre>
-      )}
-      <Link className={cn(buttonVariants({}))} href={"/products"}>
-        Go to products
-      </Link>
+    <div className="flex min-h-screen flex-col">
+      <Suspense fallback={"Loading..."}>
+        <Hero />
+      </Suspense>
+      <Suspense fallback={"Loading..."}>
+        <ExploreByKeywords />
+      </Suspense>
+      <Suspense fallback={"Loading..."}>
+        <ExploreByAuthorities />
+      </Suspense>
+      <Suspense fallback={"Loading..."}>
+        <ExploreByStates />
+      </Suspense>
+      <Suspense fallback={"Loading..."}>
+        <Services />
+      </Suspense>
     </div>
   );
 }
