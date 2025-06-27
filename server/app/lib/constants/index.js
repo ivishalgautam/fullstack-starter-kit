@@ -43,7 +43,6 @@ const constants = {
   },
   models: {
     USER_TABLE: "users",
-    BANNER_TABLE: "banners",
   },
   bcrypt: {
     SALT_ROUNDS: 10,
@@ -52,6 +51,11 @@ const constants = {
     TOKEN_EXPIRES_IN: 1000 * 60 * 15, // 15 * 1 minute = 15 minutes
     REFRESH_TOKEN_EXPIRES_IN: 1000 * 60 * 60 * 24 * 1, // 1 day
   },
+  rateLimit: {
+    max_rate_limit: 1000,
+    time_window: "1 minute",
+  },
+  allowedOrigins: ["http://localhost:3000", "http://localhost:4000"],
 };
 
 export default constants;

@@ -17,9 +17,12 @@ const config = {
   // jwt secret key
   jwt_secret: process.env.JWT_SECRET,
   jwt_refresh_secret: process.env.JWT_REFRESH_SECRET,
+
+  // smtp
   smtp_from_email: process.env.SMTP_EMAIL,
   smtp_port: parseInt(process.env.SMTP_PORT) || 465,
-  smtp_host: process.env.SMTP_SERVER || "smtp.gmail.com",
+  smtp_host: process.env.SMTP_HOST || "smtp.gmail.com",
+  smtp_user: process.env.SMTP_USER,
   smtp_password: process.env.SMTP_PASSWORD,
 };
 
