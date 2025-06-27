@@ -92,7 +92,9 @@ const init = async (sequelize) => {
   await UserModel.sync({ alter: true });
 };
 
-const create = async (req, { transaction }) => {
+const create = async (req, transaction) => {
+  const options = {};
+  if (transaction) options.transaction = transaction;
   const hash_password = req.body.password
     ? hash.encrypt(req.body.password)
     : "";
@@ -109,7 +111,7 @@ const create = async (req, { transaction }) => {
       provider: req?.body?.provider,
       provider_account_id: req?.body?.provider_account_id,
     },
-    { transaction }
+    options
   );
 
   return data.dataValues;

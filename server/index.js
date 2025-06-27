@@ -3,7 +3,8 @@ import logger from "./app/logger/index.js";
 import server from "./server.js";
 import fastify from "fastify";
 
-const app = fastify({ logger: logger });
+const app = fastify({ logger: true });
+// const app = fastify({ logger: logger });
 
 try {
   server(app);

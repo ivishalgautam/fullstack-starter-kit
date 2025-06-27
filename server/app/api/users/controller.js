@@ -6,7 +6,6 @@ import hash from "../../lib/encryption/index.js";
 const create = async (req, res) => {
   try {
     const record = await table.UserModel.getByUsername(req);
-
     if (record) {
       return res.code(409).send({
         message:
@@ -123,7 +122,7 @@ const checkUsername = async (req, res) => {
 
 const getUser = async (req, res) => {
   try {
-    const record = await table.UserModel.getById(undefined, req.user_data.id);
+    const record = await table.UserModel.getById(0, req.user_data.id);
     if (!record) {
       return res.code(401).send({ message: "unauthorized!" });
     }
