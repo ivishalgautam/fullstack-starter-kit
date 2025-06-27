@@ -4,6 +4,7 @@ import QueryProvider from "@/providers/query-client-provider";
 import { usePathname } from "next/navigation";
 import Header from "../header";
 import Footer from "../footer";
+import RoleContext from "@/providers/role-context";
 
 export default function Layout({ children }) {
   const pathname = usePathname();
@@ -16,9 +17,11 @@ export default function Layout({ children }) {
 
     return (
       <AuthProvider>
-        <Header />
-        <div className="min-h-[calc(100vh-135px)]">{children}</div>
-        <Footer />
+        <RoleContext>
+          <Header />
+          <div className="min-h-[calc(100vh-135px)]">{children}</div>
+          <Footer />
+        </RoleContext>
       </AuthProvider>
     );
   };
