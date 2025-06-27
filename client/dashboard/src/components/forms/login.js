@@ -1,5 +1,4 @@
 "use client";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,6 +19,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { toast } from "sonner";
 
 // Form validation schema
 const loginSchema = z.object({
@@ -55,7 +55,7 @@ export default function LoginForm() {
   const loginMutation = useMutation({
     mutationFn: loginUser,
     onSuccess: () => {
-      toast.success("Login successful!");
+      toast.success({ title: "Success", description: "Login successful!" });
       router.replace("/dashboard");
     },
     onError: (error) => {
