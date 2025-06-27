@@ -1,6 +1,6 @@
 import { handleLogout } from "@/providers/auth-provider";
 import axios from "axios";
-const API_ROOT = "http://localhost:3001/v1";
+const API_ROOT = process.env.NEXT_PUBLIC_API_URL;
 
 const http = (headerType = "json", baseURL = API_ROOT) => {
   // Create the axios instance
@@ -53,6 +53,7 @@ const http = (headerType = "json", baseURL = API_ROOT) => {
       config.headers = { "Content-Type": "multipart/form-data" };
     }
     return client.post(path, payload, config).then((response) => {
+      console.log({ response });
       return response.data;
     });
   }

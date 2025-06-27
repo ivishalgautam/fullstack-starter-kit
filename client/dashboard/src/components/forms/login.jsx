@@ -1,21 +1,20 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { z } from "zod";
 import axios from "axios";
 import { AtSign, KeyRound, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 // import { Checkbox } from "@/components/ui/checkbox";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -25,7 +24,7 @@ import { toast } from "sonner";
 const loginSchema = z.object({
   username: z.string().min(1, "Username is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
-  rememberMe: z.boolean().optional(),
+  // rememberMe: z.boolean().optional(),
 });
 
 // API login function
@@ -55,7 +54,7 @@ export default function LoginForm() {
   const loginMutation = useMutation({
     mutationFn: loginUser,
     onSuccess: () => {
-      toast.success({ title: "Success", description: "Login successful!" });
+      toast.success("Login successful!");
       router.replace("/dashboard");
     },
     onError: (error) => {
@@ -68,11 +67,11 @@ export default function LoginForm() {
   });
 
   const onSubmit = (data) => {
-    loginMutation.mutate(data);
+    loginMutation.mutate({ ...data, role: "admin" });
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto shadow-lg">
+    <Card className="">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold text-center">Login</CardTitle>
         <CardDescription className="text-center">
@@ -100,15 +99,15 @@ export default function LoginForm() {
           </div>
 
           <div className="space-y-2">
-            {/* <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
-                <Link
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password">Password</Label>
+              {/* <Link
                   href="/forgot-password"
                   className="text-sm text-primary hover:underline"
                 >
                   Forgot password?
-                </Link>
-              </div> */}
+                </Link> */}
+            </div>
             <div className="relative">
               <KeyRound className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
               <Input

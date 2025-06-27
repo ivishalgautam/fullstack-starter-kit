@@ -22,6 +22,7 @@ export async function GET(request) {
     const newTokenData = await http().post(endpoints.auth.refresh, {
       refresh_token,
     });
+    console.log({ newTokenData });
     if (!newTokenData) {
       cookieStore.delete("token");
       cookieStore.delete("refresh_token");
@@ -45,9 +46,10 @@ export async function GET(request) {
       },
     });
     const data = res.data;
-
+    console.log({ data });
     return NextResponse.json({ user: data }, { status: res.status });
   } catch (error) {
+    console.log(error.response.data);
     return NextResponse.json(
       { message: error?.response?.data?.message ?? "Something went wrong" },
       { status: error.status }
