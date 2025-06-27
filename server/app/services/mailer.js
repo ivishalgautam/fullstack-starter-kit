@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import path from "path";
 import fs from "fs";
 import ejs from "ejs";
+import config from "../config/index.js";
 
 // Create transporter using Brevo SMTP
 const transporter = nodemailer.createTransport({
