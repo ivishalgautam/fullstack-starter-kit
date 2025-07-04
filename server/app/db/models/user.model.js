@@ -99,6 +99,7 @@ const create = async (req, transaction) => {
   const hash_password = req.body.password
     ? hash.encrypt(req.body.password)
     : "";
+
   const data = await UserModel.create(
     {
       username: req.body.username,
