@@ -147,7 +147,6 @@ export default function UserForm({ id, type }) {
             name="mobile_number"
             render={({ field }) => (
               <PhoneSelect
-                key={field.value}
                 value={field.value}
                 onChange={field.onChange}
                 placeholder="Enter your mobile number"
