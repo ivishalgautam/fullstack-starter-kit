@@ -17,10 +17,11 @@ import {
   useDeleteUser,
   useGetUsers,
   useUpdateUser,
-} from "@/mutations/user-mutation";
+} from "@/hooks/user-queries";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { columns } from "../columns";
+import { DeleteDialog } from "@/components/dialog/delete-dialog";
 
 export default function UserListing() {
   const [isModal, setIsModal] = useState(false);
@@ -55,36 +56,11 @@ export default function UserListing() {
         data={data?.users ?? []}
         totalItems={data?.total}
       />
-      <UserDeleteDialog
+      <DeleteDialog
         deleteMutation={deleteMutation}
         isOpen={isModal}
         setIsOpen={setIsModal}
       />
     </div>
-  );
-}
-
-export function UserDeleteDialog({ isOpen, setIsOpen, deleteMutation }) {
-  return (
-    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently deleted.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <Button
-            variant="destructive"
-            onClick={deleteMutation.mutate}
-            disabled={deleteMutation.isPending}
-          >
-            Delete
-          </Button>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
   );
 }

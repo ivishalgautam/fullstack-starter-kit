@@ -61,7 +61,7 @@ export default function LoginForm() {
       toast.error(
         error?.response?.data?.message ??
           error?.message ??
-          "Login failed. Please check your credentials."
+          "Login failed. Please check your credentials.",
       );
     },
   });
@@ -71,9 +71,9 @@ export default function LoginForm() {
   };
 
   return (
-    <Card className="">
+    <div className="m-auto max-w-xs">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-center">Login</CardTitle>
+        <CardTitle className="text-center text-2xl font-bold">Login</CardTitle>
         <CardDescription className="text-center">
           Enter your credentials to access your account
         </CardDescription>
@@ -83,7 +83,7 @@ export default function LoginForm() {
           <div className="space-y-2">
             <Label htmlFor="username">Username</Label>
             <div className="relative">
-              <AtSign className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+              <AtSign className="text-muted-foreground absolute top-2.5 left-3 h-5 w-5" />
               <Input
                 id="username"
                 placeholder="johndoe"
@@ -92,7 +92,7 @@ export default function LoginForm() {
               />
             </div>
             {errors.username && (
-              <p className="text-sm text-destructive">
+              <p className="text-destructive text-sm">
                 {errors.username.message}
               </p>
             )}
@@ -109,7 +109,7 @@ export default function LoginForm() {
                 </Link> */}
             </div>
             <div className="relative">
-              <KeyRound className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+              <KeyRound className="text-muted-foreground absolute top-2.5 left-3 h-5 w-5" />
               <Input
                 id="password"
                 type="password"
@@ -119,7 +119,7 @@ export default function LoginForm() {
               />
             </div>
             {errors.password && (
-              <p className="text-sm text-destructive">
+              <p className="text-destructive text-sm">
                 {errors.password.message}
               </p>
             )}
@@ -137,6 +137,6 @@ export default function LoginForm() {
           </Button>
         </form>
       </CardContent>
-    </Card>
+    </div>
   );
 }

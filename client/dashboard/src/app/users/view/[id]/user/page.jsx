@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useGetUserProfile } from "@/mutations/user-mutation";
+import { useGetUserProfile } from "@/hooks/user-queries";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function UserViewPage({ params: { id } }) {

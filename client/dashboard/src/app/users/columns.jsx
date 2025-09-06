@@ -79,6 +79,7 @@ export const columns = (updateMutation, setUserId, openModal) => [
               setUserId(id);
               return updateMutation.mutate({ is_active: checked });
             }}
+            className="h-5 w-8 [&_span]:size-4 data-[state=checked]:[&_span]:translate-x-3 data-[state=checked]:[&_span]:rtl:-translate-x-3"
           />
           <Small className={is_active ? "text-green-500" : "text-red-500"}>
             {is_active ? "active" : "inactive"}

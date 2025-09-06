@@ -1,19 +1,45 @@
+import PageContainer from "@/components/layout/page-container";
 import { buttonVariants } from "@/components/ui/button";
+import { Heading } from "@/components/ui/heading";
+import { DataTableSkeleton } from "@/components/ui/table/data-table-skeleton";
+import { searchParamsCache, serialize } from "@/lib/searchparams";
+import { cn } from "@/lib/utils";
+import { Plus } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import { Suspense } from "react";
+import Listing from "./_component/listing";
+import TableActions from "./_component/table-actions";
 
-export default function ProductsPage() {
+export const metadata = {
+  title: "Products",
+};
+
+export default async function Tenders({ searchParams }) {
+  searchParamsCache.parse(searchParams);
+  const key = serialize({ ...searchParams });
+
   return (
-    <div className="flex items-center justify-start gap-4 flex-wrap">
-      {Array.from({ length: 1000 }).map((_, ind) => (
+    <PageContainer>
+      <div className="flex items-start justify-between gap-2">
+        <Heading
+          title="Products"
+          description="Manage products (Create, Update, Delete)."
+        />
+
         <Link
-          key={ind}
-          href={`/products/${ind + 1}`}
-          className={buttonVariants({ variant: "outline" })}
+          href={"/products/create"}
+          className={cn(buttonVariants({ size: "sm" }))}
         >
-          Product {ind + 1}
+          <Plus /> Add
         </Link>
-      ))}
-    </div>
+      </div>
+      <TableActions />
+      <Suspense
+        key={key}
+        fallback={<DataTableSkeleton columnCount={4} rowCount={10} />}
+      >
+        <Listing />
+      </Suspense>
+    </PageContainer>
   );
 }

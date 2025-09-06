@@ -1,4 +1,10 @@
-import { LayoutDashboard, MessageSquareText, User, Users } from "lucide-react";
+import {
+  Box,
+  LayoutDashboard,
+  MessageSquareText,
+  User,
+  Users,
+} from "lucide-react";
 
 const ROLES = {
   ADMIN: "admin",
@@ -15,8 +21,8 @@ export const sidebarData = [
     items: [],
   },
   {
-    title: "User",
-    url: "/users",
+    title: "Users",
+    url: "/users?page=1&limit=10",
     icon: Users,
     roles: [ROLES.ADMIN],
     isVisible: true,
@@ -36,10 +42,31 @@ export const sidebarData = [
     ],
   },
   {
+    title: "Products",
+    url: "/products?page=1&limit=10",
+    icon: Box,
+    roles: [ROLES.ADMIN],
+    isVisible: true,
+    items: [
+      {
+        title: "Create",
+        url: "/products/create",
+        roles: [ROLES.ADMIN],
+        isVisible: true,
+      },
+      {
+        title: "Edit",
+        url: "/products/:id/edit",
+        roles: [ROLES.ADMIN],
+        isVisible: false,
+      },
+    ],
+  },
+  {
     title: "Enquiries",
     url: "/enquiries",
     icon: MessageSquareText,
-    roles: [ROLES.ADMIN],
+    roles: [],
     isVisible: true,
     items: [],
   },
@@ -47,7 +74,7 @@ export const sidebarData = [
     title: "Queries",
     url: "/queries",
     icon: MessageSquareText,
-    roles: [ROLES.ADMIN],
+    roles: [],
     isVisible: true,
     items: [],
   },
@@ -55,7 +82,7 @@ export const sidebarData = [
     title: "Profile Overview",
     url: "/profile",
     icon: User,
-    roles: [ROLES.ADMIN, ROLES.STAFF, ROLES.ADMIN],
+    roles: [],
     isVisible: true,
     items: [],
   },

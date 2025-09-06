@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const userFormSchema = z
   .object({
-    role: z.enum(["admin", "dealer", "customer"], {
+    role: z.enum(["admin", "user"], {
       required_error: "Role is required.",
     }),
     username: z
@@ -17,8 +17,7 @@ export const userFormSchema = z
     mobile_number: z
       .string({ required_error: "Mobile number is required." })
       .min(1, { message: "Mobile number is required." }),
-    first_name: z.string().optional(),
-    last_name: z.string().optional(),
+    fullname: z.string().min(1, { message: "Full name is required." }),
     password: z.string().min(8, "Password must be at least 8 characters"),
     confirm_password: z
       .string()
@@ -35,7 +34,7 @@ export const userFormSchema = z
 
 export const userUpdateSchema = z
   .object({
-    role: z.enum(["admin", "dealer", "customer"], {
+    role: z.enum(["admin", "user"], {
       required_error: "Role is required.",
     }),
     username: z
@@ -49,8 +48,7 @@ export const userUpdateSchema = z
     mobile_number: z
       .string({ required_error: "Mobile number is required." })
       .min(1, { message: "Mobile number is required." }),
-    first_name: z.string().optional(),
-    last_name: z.string().optional(),
+    fullname: z.string().min(1, { message: "Full name is required." }),
   })
   .refine((data) => isValidPhoneNumber(data.mobile_number), {
     path: ["mobile_number"],

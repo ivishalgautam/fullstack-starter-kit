@@ -60,7 +60,7 @@ export const useCreateUser = (handleSuccess) => {
   });
 };
 
-export const useUpdateUser = (id) => {
+export const useUpdateUser = (id, callback) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -68,6 +68,7 @@ export const useUpdateUser = (id) => {
     onSuccess: () => {
       toast("User updated successfully.");
       queryClient.invalidateQueries(["users"]);
+      callback?.();
     },
     onError: (error) => {
       console.error("Mutation Error:", error);

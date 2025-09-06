@@ -18,16 +18,18 @@ import {
 } from "../ui/select";
 import { cn } from "@/lib/utils";
 import { Alert, AlertDescription } from "../ui/alert";
-import { useCreateUser, useGetUser } from "@/mutations/user-mutation";
-import { useUpdateUser } from "../../mutations/user-mutation";
+import { useCreateUser, useGetUser } from "@/hooks/user-queries";
+import { useUpdateUser } from "../../hooks/user-queries";
 import { getFormErrors } from "@/lib/get-form-errors";
 import { useEffect } from "react";
 import Loader from "../loader";
 import ErrorMessage from "../ui/error";
+import { useRouter } from "next/navigation";
 
 export default function UserForm({ id, type }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const router = useRouter();
 
   const {
     register,
@@ -44,16 +46,18 @@ export default function UserForm({ id, type }) {
       username: "",
       email: "",
       mobile_number: "",
-      first_name: "",
-      last_name: "",
+      fullname: "",
       password: "",
       role: "",
     },
   });
   const createMutation = useCreateUser(() => {
-    toast("Successfully registered.");
+    reset();
+    router.replace("/users?page=1&limit=10");
   });
-  const updateMutation = useUpdateUser(id);
+  const updateMutation = useUpdateUser(id, () => {
+    router.back();
+  });
   const { data, isLoading, isError, error } = useGetUser(id);
 
   const onSubmit = (data) => {
@@ -72,8 +76,7 @@ export default function UserForm({ id, type }) {
     if (type === "edit" && data) {
       reset({
         email: data.email || "",
-        first_name: data.first_name || "",
-        last_name: data.last_name || "",
+        fullname: data.fullname || "",
         mobile_number: data.mobile_number || "",
         role: data.role || "",
         username: data.username || "",
@@ -108,8 +111,7 @@ export default function UserForm({ id, type }) {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="admin">Admin</SelectItem>
-                    <SelectItem value="dealer">Dealer</SelectItem>
-                    <SelectItem value="customer">Customer</SelectItem>
+                    <SelectItem value="user">User</SelectItem>
                   </SelectContent>
                 </Select>
               );
@@ -118,24 +120,13 @@ export default function UserForm({ id, type }) {
         </div>
 
         {/* First Name */}
-        <div className="space-y-2">
-          <Label htmlFor="first_name">First Name</Label>
+        <div className="col-span-full space-y-2">
+          <Label htmlFor="fullname">Fullname *</Label>
           <Input
-            id="first_name"
+            id="fullname"
             placeholder="Enter your first name"
-            {...register("first_name")}
-            className={cn({ "border-red-500": errors.first_name })}
-          />
-        </div>
-
-        {/* Last Name */}
-        <div className="space-y-2">
-          <Label htmlFor="last_name">Last Name</Label>
-          <Input
-            id="last_name"
-            placeholder="Enter your last name"
-            {...register("last_name")}
-            className={cn({ "border-red-500": errors.last_name })}
+            {...register("fullname")}
+            className={cn({ "border-red-500": errors.fullname })}
           />
         </div>
 
@@ -205,7 +196,6 @@ export default function UserForm({ id, type }) {
             </div>
           </div>
         )}
-
         {/* Confirm Password */}
         {type === "create" && (
           <div className="relative space-y-2">

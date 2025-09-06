@@ -2,7 +2,6 @@
 import { DataTableResetFilter } from "@/components/ui/table/data-table-reset-filter";
 import { DataTableSearch } from "@/components/ui/table/data-table-search";
 import { useTableFilters } from "./use-table-filters";
-import { DataTableFilterBox } from "@/components/ui/table/data-table-filter-box";
 
 export default function TableActions() {
   const {
@@ -18,7 +17,7 @@ export default function TableActions() {
   return (
     <div className="my-3 flex flex-wrap items-center gap-4">
       <DataTableSearch
-        searchKey=""
+        searchKey="name"
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         setPage={setPage}
@@ -26,7 +25,10 @@ export default function TableActions() {
       {/* <DataTableFilterBox
         filterKey="role"
         title="Role"
-        options={[{ label: "User", value: "user" }]}
+        options={[
+          { label: "Patient", value: "patient" },
+          { label: "Doctor", value: "doctor" },
+        ]}
         setFilterValue={setRoleFilter}
         filterValue={roleFilter}
       /> */}

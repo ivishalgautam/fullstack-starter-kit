@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
             <Layout>{children}</Layout>
           </NuqsAdapter>
         </ThemeProvider>
-        <Toaster />
+        <Toaster richColors closeButton />
       </body>
     </html>
   );
