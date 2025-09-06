@@ -9,7 +9,7 @@ import {
 import { sidebarData } from "@/data/routes";
 import { useAuth } from "@/providers/auth-provider";
 import { useMemo } from "react";
-import { NavUser } from "./nav-user";
+import { SidebarUser } from "./sidebar-user";
 import { Skeleton } from "./ui/skeleton";
 
 export function AppSidebar({ ...props }) {
@@ -21,22 +21,27 @@ export function AppSidebar({ ...props }) {
         return {
           ...item,
           items: item.items.filter(
-            (item) => item.roles.includes(user?.role) && item.isVisible
+            (item) => item.roles.includes(user?.role) && item.isVisible,
           ),
         };
       });
   }, [user]);
 
   return (
-    <Sidebar variant="sidebar" collapsible="icon" {...props}>
+    <Sidebar
+      variant="sidebar"
+      collapsible="icon"
+      {...props}
+      className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
+    >
       <SidebarContent>
         <NavMain items={filteredRoutes} />
       </SidebarContent>
       <SidebarFooter>
         {isUserLoading ? (
-          <Skeleton className={"bg-white/5 h-12"} />
+          <Skeleton className={"h-12 bg-white/5"} />
         ) : (
-          <NavUser user={user} />
+          <SidebarUser user={user} />
         )}
       </SidebarFooter>
     </Sidebar>

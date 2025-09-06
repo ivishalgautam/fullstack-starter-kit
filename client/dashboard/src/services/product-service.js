@@ -14,7 +14,7 @@ export const fetchProduct = async (id) => {
 };
 
 export const createProduct = async (product) => {
-  const { data } = await http().post(endpoints.products.getAll, product);
+  const { data } = await http().post(endpoints.products.getAll, product, true);
   return data;
 };
 
@@ -22,6 +22,7 @@ export const updateProduct = async (id, product) => {
   const { data } = await http().put(
     `${endpoints.products.getAll}/${id}`,
     product,
+    true,
   );
   return data;
 };

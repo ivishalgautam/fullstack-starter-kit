@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import FileUploaderServer from "@/features/file-uploader-server";
 import { cn } from "@/lib/utils";
 import { Plus, Trash } from "lucide-react";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
+import { Textarea } from "../ui/textarea";
+import FileUploaderServer from "@/features/file-uploader-server";
 
 export default function ProductFeatures() {
   const {
@@ -51,22 +52,22 @@ function FeatureItem({ register, index, remove, errors, control }) {
       <div className="space-y-1">
         <Label>Heading</Label>
         <Input
-          {...register(`features.${index}.heading`)}
+          {...register(`features.${index}.title`)}
           placeholder="Enter heading"
           className={cn({
-            "border-red-500": errors?.features?.[index]?.heading,
+            "border-red-500": errors?.features?.[index]?.title,
           })}
         />
       </div>
 
-      {/* Sub Heading */}
+      {/* Decription */}
       <div className="space-y-1">
-        <Label>Sub Heading</Label>
-        <Input
-          {...register(`features.${index}.sub_heading`)}
-          placeholder="Enter sub heading"
+        <Label>Decription</Label>
+        <Textarea
+          {...register(`features.${index}.description`)}
+          placeholder="Enter decription"
           className={cn({
-            "border-red-500": errors?.features?.[index]?.sub_heading,
+            "border-red-500": errors?.features?.[index]?.description,
           })}
         />
       </div>

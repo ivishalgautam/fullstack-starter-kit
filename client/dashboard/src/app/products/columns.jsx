@@ -14,30 +14,50 @@ import { Button } from "@/components/ui/button";
 import { rupee } from "@/lib/Intl";
 import moment from "moment";
 import Link from "next/link";
+import { ArrowUpDown } from "lucide-react";
 
 export const columns = (openModal, setId) => [
   {
-    accessorKey: "bid_number",
-    header: "BID NO.",
+    accessorKey: "title",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Title <ArrowUpDown />
+        </Button>
+      );
+    },
   },
   {
-    accessorKey: "tender_value",
+    accessorKey: "price",
     header: ({ column }) => {
-      return <Button variant="ghost">TENDER AMT.</Button>;
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Price <ArrowUpDown />
+        </Button>
+      );
     },
     cell: ({ row }) => {
-      const amount = row.getValue("tender_value");
+      const amount = row.getValue("price");
       return <Badge> {rupee.format(amount)}</Badge>;
     },
   },
   {
-    accessorKey: "quantity",
-    header: "QUANTITY",
-  },
-  {
     accessorKey: "created_at",
     header: ({ column }) => {
-      return <Button variant="ghost">CREATED ON</Button>;
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          CREATED ON <ArrowUpDown />
+        </Button>
+      );
     },
     cell: ({ row }) => {
       return (

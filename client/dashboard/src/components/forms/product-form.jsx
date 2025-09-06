@@ -42,11 +42,12 @@ import {
 import ProductYouTubeURLs from "./product-youtube-urls";
 
 const defaultValues = {
-  picture: [],
+  pictures: [],
   title: "",
   description: "",
   features: [{ image: null, title: "", description: "" }],
   specifications: [{ title: "", description: "" }],
+  youtube_urls: [{ url: "" }],
   price: "",
   meta_title: "",
   meta_description: "",
@@ -56,7 +57,7 @@ const defaultValues = {
 export default function ProductForm({ id, type }) {
   const router = useRouter();
   const [files, setFiles] = useState({
-    picture: [],
+    pictures: [],
   });
   const [fileUrls, setFileUrls] = useState({
     picture_urls: [],
@@ -80,15 +81,15 @@ export default function ProductForm({ id, type }) {
 
   const createMutation = useCreateProduct(() => {
     reset();
-    router.push("/vehicles?page=1&limit=10");
+    router.push("/products?page=1&limit=10");
   });
   const updateMutation = useUpdateProduct(id, () => {
     reset();
-    router.push("/vehicles?page=1&limit=10");
+    router.push("/products?page=1&limit=10");
   });
   const { data, isLoading, isError, error } = useProduct(id);
   const onSubmit = (data) => {
-    if (!fileUrls?.picture_urls?.length && !files.picture.length) {
+    if (!fileUrls?.picture_urls?.length && !files.pictures.length) {
       return setError("picture", {
         type: "manual",
         message: "Atleat 1 picture is required*",
@@ -96,8 +97,10 @@ export default function ProductForm({ id, type }) {
     }
 
     const formData = new FormData();
-    files.picture?.forEach((file) => {
-      formData.append("picture", file);
+    Object.entries(files).forEach(([key, value]) => {
+      value?.forEach((file) => {
+        formData.append(key, file);
+      });
     });
 
     Object.entries(data).forEach(([key, value]) => {
@@ -152,7 +155,7 @@ export default function ProductForm({ id, type }) {
   }, [quantity, setValue]);
 
   const handlepictureChange = useCallback((data) => {
-    setFiles((prev) => ({ ...prev, picture: data }));
+    setFiles((prev) => ({ ...prev, pictures: data }));
   }, []);
 
   if (type === "edit" && isLoading) return <Loader />;
@@ -167,7 +170,7 @@ export default function ProductForm({ id, type }) {
             <FileUpload
               onFileChange={handlepictureChange}
               inputName={"picture"}
-              className={cn({ "border-red-500": errors.picture })}
+              className={cn({ "border-red-500": errors.pictures })}
               initialFiles={[]}
               multiple={true}
               maxFiles={50}
@@ -231,6 +234,17 @@ export default function ProductForm({ id, type }) {
               />
             </div>
 
+            {/*  min age */}
+            <div className="space-y-2">
+              <Label>Min Age *</Label>
+              <Input
+                type="number"
+                placeholder="Enter min age"
+                {...register(`min_age`, { valueAsNumber: true })}
+                className={cn({ "border-red-500": errors.min_age })}
+              />
+            </div>
+
             {/* description */}
             <div className="col-span-full space-y-2">
               <Label htmlFor="description">Description</Label>
@@ -239,17 +253,6 @@ export default function ProductForm({ id, type }) {
                 {...register("description")}
                 className={cn({ "border-red-500": errors.description })}
                 placeholder="Enter description"
-              />
-            </div>
-
-            {/* video_link */}
-            <div className="col-span-full space-y-2">
-              <Label htmlFor="video_link">Video link</Label>
-              <Input
-                id="video_link"
-                {...register("video_link")}
-                className={cn({ "border-red-500": errors.video_link })}
-                placeholder="Enter Video link"
               />
             </div>
           </div>
@@ -265,9 +268,9 @@ export default function ProductForm({ id, type }) {
 
         <Separator className="col-span-full" />
 
-        {/* specification */}
+        {/* YouTube Links */}
         <div className="space-y-4">
-          <h3 className="text-3xl font-semibold">Specification</h3>
+          <h3 className="text-3xl font-semibold">YouTube Links</h3>
           <ProductYouTubeURLs />
         </div>
 

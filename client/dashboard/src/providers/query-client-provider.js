@@ -7,6 +7,7 @@ import {
   MutationCache,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { toast } from "sonner";
 
 export default function QueryProvider({ children }) {
   const queryClient = new QueryClient({

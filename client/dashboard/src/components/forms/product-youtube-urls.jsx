@@ -56,7 +56,7 @@ export default function ProductYouTubeURLs() {
           onClick={() => append({ title: "", description: "" })}
         >
           <Plus className="mr-2 h-4 w-4" />
-          Add Spec
+          Add URL
         </Button>
       </div>
     </div>

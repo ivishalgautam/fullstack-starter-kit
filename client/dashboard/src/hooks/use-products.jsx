@@ -32,7 +32,6 @@ export const useCreateProduct = (callback) => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
       callback?.();
     },
-    onError: (error) => handleError(error),
   });
 };
 
@@ -44,7 +43,6 @@ export const useUpdateProduct = (id, callback) => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
       callback?.();
     },
-    onError: (error) => handleError(error),
   });
 };
 
@@ -56,6 +54,5 @@ export const useDeleteProduct = (id, callback) => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
       callback?.();
     },
-    onError: (error) => handleError(error),
   });
 };

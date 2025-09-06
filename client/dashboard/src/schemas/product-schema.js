@@ -3,7 +3,9 @@ import { z } from "zod";
 
 export const ProductFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  price: z.string().regex(/^\d+(\.\d{1,2})?$/, "Invalid price"),
+  price: z
+    .number({ message: "Enter valid price." })
+    .min(1, { message: "Price required." }),
   pictures: z.array(z.any()).default([]),
   description: z.string().optional(),
   min_age: z.number().int().nonnegative(),

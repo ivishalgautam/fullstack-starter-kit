@@ -8,6 +8,7 @@ export const endpoints = {
   },
   profile: "/users/me",
   files: {
+    upload: "/upload/files",
     getFiles: "/upload",
     deleteKey: "/upload/s3",
     preSignedUrl: "/upload/presigned-url",

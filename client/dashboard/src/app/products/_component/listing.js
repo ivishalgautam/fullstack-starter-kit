@@ -2,7 +2,7 @@
 
 import { DataTable } from "@/components/ui/table/data-table";
 import { DataTableSkeleton } from "@/components/ui/table/data-table-skeleton";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { columns } from "../columns";
 import { DeleteDialog } from "./delete-dialog";
@@ -14,9 +14,8 @@ export default function Listing() {
   const [isModal, setIsModal] = useState(false);
   const searchParams = useSearchParams();
   const searchParamsStr = searchParams.toString();
-  const router = useRouter();
   const { data, isLoading, isError, error } = useProducts(searchParamsStr);
-  const deleteMutation = useDeleteProduct(() => {
+  const deleteMutation = useDeleteProduct(id, () => {
     setIsModal(false);
   });
 
@@ -29,7 +28,7 @@ export default function Listing() {
     <div className="border-input w-full rounded-lg">
       <DataTable
         columns={columns(openModal, setId)}
-        data={data?.tenders ?? []}
+        data={data?.products ?? []}
         totalItems={data?.total ?? 0}
       />
       <DeleteDialog

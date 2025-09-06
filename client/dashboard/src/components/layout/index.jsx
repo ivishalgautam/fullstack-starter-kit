@@ -4,6 +4,7 @@ import QueryProvider from "@/providers/query-client-provider";
 import { usePathname } from "next/navigation";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "../ui/sidebar";
 import { AppSidebar } from "../app-sidebar";
+import { SiteHeader } from "../site-header";
 
 export default function Layout({ children }) {
   const pathname = usePathname();
@@ -14,17 +15,17 @@ export default function Layout({ children }) {
 
     return (
       <AuthProvider>
-        <SidebarProvider>
-          <AppSidebar />
-          <SidebarInset>
-            <header className="flex h-8 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-8">
-              <div className="flex items-center gap-2 px-2">
-                <SidebarTrigger className="-ml-1" />
-              </div>
-            </header>
-            <div className="px-4">{children}</div>
-          </SidebarInset>
-        </SidebarProvider>
+        <div className="[--header-height:calc(--spacing(14))]">
+          <SidebarProvider className="flex flex-col">
+            <SiteHeader />
+            <div className="flex flex-1">
+              <AppSidebar />
+              <SidebarInset>
+                <div className="p-4">{children}</div>
+              </SidebarInset>
+            </div>
+          </SidebarProvider>
+        </div>
       </AuthProvider>
     );
   };
