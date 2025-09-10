@@ -1,4 +1,4 @@
-import ProductForm from "@/components/forms/product-form";
+import BookForm from "@/components/forms/book-form";
 import PageContainer from "@/components/layout/page-container";
 import { Heading } from "@/components/ui/heading";
 
@@ -8,7 +8,7 @@ export default async function EditPage({ params }) {
   return (
     <PageContainer>
       <Heading title={"Edit Product"} description="Edit Product." />
-      <ProductForm type="edit" id={id} />
+      <BookForm type="edit" id={id} />
     </PageContainer>
   );
 }

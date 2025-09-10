@@ -58,6 +58,11 @@ function FeatureItem({ register, index, remove, errors, control }) {
             "border-red-500": errors?.features?.[index]?.title,
           })}
         />
+        {errors?.features?.[index]?.title && (
+          <span className="text-xs text-red-500">
+            {errors?.features?.[index]?.title?.message}
+          </span>
+        )}
       </div>
 
       {/* Decription */}
@@ -70,6 +75,11 @@ function FeatureItem({ register, index, remove, errors, control }) {
             "border-red-500": errors?.features?.[index]?.description,
           })}
         />
+        {errors?.features?.[index]?.description && (
+          <span className="text-xs text-red-500">
+            {errors?.features?.[index]?.description?.message}
+          </span>
+        )}
       </div>
 
       {/* Image Upload */}
@@ -88,6 +98,11 @@ function FeatureItem({ register, index, remove, errors, control }) {
             />
           )}
         />
+        {errors?.features?.[index]?.image && (
+          <span className="text-xs text-red-500">
+            {errors?.features?.[index]?.image?.message}
+          </span>
+        )}
       </div>
 
       {/* Remove Button */}

@@ -9,7 +9,7 @@ export const fetchProducts = async (searchParams) => {
 };
 
 export const fetchProduct = async (id) => {
-  const { data } = await http().get(`/products/${id}`);
+  const { data } = await http().get(`${endpoints.products.getAll}/${id}`);
   return data;
 };
 

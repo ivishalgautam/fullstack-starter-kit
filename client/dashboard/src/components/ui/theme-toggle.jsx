@@ -1,17 +1,21 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useEffect, useState } from "react";
 import { MoonIcon, SunIcon } from "lucide-react";
-
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useTheme } from "next-themes";
 
 export default function ThemeToggle() {
   const id = useId();
-  const [checked, setChecked] = useState(true);
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
   return (
     <div>
       <div className="relative inline-grid h-9 grid-cols-[1fr_1fr] items-center text-sm font-medium">
@@ -29,7 +33,7 @@ export default function ThemeToggle() {
         </span>
       </div>
       <Label htmlFor={id} className="sr-only">
-        Labeled switch
+        Theme toggle
       </Label>
     </div>
   );

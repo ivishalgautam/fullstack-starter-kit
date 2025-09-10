@@ -34,6 +34,11 @@ export default function ProductYouTubeURLs() {
                   "border-red-500": errors?.youtube_urls?.[ind]?.url,
                 })}
               />
+              {errors?.youtube_urls?.[ind]?.url && (
+                <span className="text-xs text-red-500">
+                  {errors?.youtube_urls?.[ind]?.url?.message}
+                </span>
+              )}
             </div>
 
             <div className="text-right">

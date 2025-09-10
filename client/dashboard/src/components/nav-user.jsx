@@ -12,29 +12,16 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@/components/ui/sidebar";
 import { handleLogout, useAuth } from "@/providers/auth-provider";
-import { useTheme } from "next-themes";
 import { Skeleton } from "./ui/skeleton";
 
 export function NavUser({}) {
   const { user, isUserLoading } = useAuth();
-  const { isMobile } = useSidebar();
-  const { theme, setTheme } = useTheme();
 
   if (isUserLoading) return <Skeleton className={"size-5 rounded-full"} />;
 
@@ -43,7 +30,7 @@ export function NavUser({}) {
       <DropdownMenuTrigger asChild>
         <Avatar>
           <AvatarFallback className="rounded-lg">
-            <UserRound />
+            <UserRound size={18} />
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
@@ -65,9 +52,6 @@ export function NavUser({}) {
             </div>
           </div>
         </DropdownMenuLabel>
-
-        <DropdownMenuSeparator />
-
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout}>
           <LogOut />

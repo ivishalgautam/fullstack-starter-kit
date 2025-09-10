@@ -37,13 +37,13 @@ export function AppSidebar({ ...props }) {
       <SidebarContent>
         <NavMain items={filteredRoutes} />
       </SidebarContent>
-      <SidebarFooter>
+      {/* <SidebarFooter>
         {isUserLoading ? (
           <Skeleton className={"h-12 bg-white/5"} />
         ) : (
           <SidebarUser user={user} />
         )}
-      </SidebarFooter>
+      </SidebarFooter> */}
     </Sidebar>
   );
 }

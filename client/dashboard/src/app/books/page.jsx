@@ -14,7 +14,7 @@ export const metadata = {
   title: "Products",
 };
 
-export default async function Products({ searchParams }) {
+export default async function Books({ searchParams }) {
   searchParamsCache.parse(await searchParams);
   const key = serialize({ ...(await searchParams) });
 
@@ -22,12 +22,12 @@ export default async function Products({ searchParams }) {
     <PageContainer>
       <div className="flex items-start justify-between gap-2">
         <Heading
-          title="Products"
-          description="Manage products (Create, Update, Delete)."
+          title="Books"
+          description="Manage books (Create, Update, Delete)."
         />
 
         <Link
-          href={"/products/create"}
+          href={"/books/create"}
           className={cn(buttonVariants({ size: "sm" }))}
         >
           <Plus /> Add

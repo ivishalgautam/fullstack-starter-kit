@@ -34,6 +34,11 @@ export default function ProductSpecifications() {
                   "border-red-500": errors?.specifications?.[ind]?.title,
                 })}
               />
+              {errors?.specifications?.[ind]?.title && (
+                <span className="text-xs text-red-500">
+                  {errors?.specifications?.[ind]?.title?.message}
+                </span>
+              )}
             </div>
 
             <div className="space-y-1">
@@ -45,6 +50,11 @@ export default function ProductSpecifications() {
                   "border-red-500": errors?.specifications?.[ind]?.description,
                 })}
               />
+              {errors?.specifications?.[ind]?.description && (
+                <span className="text-xs text-red-500">
+                  {errors?.specifications?.[ind]?.description?.message}
+                </span>
+              )}
             </div>
 
             <div className="text-right">

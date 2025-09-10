@@ -6,8 +6,6 @@ import {
   QueryCache,
   MutationCache,
 } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { toast } from "sonner";
 
 export default function QueryProvider({ children }) {
   const queryClient = new QueryClient({
@@ -30,7 +28,7 @@ export default function QueryProvider({ children }) {
       },
       onSuccess: (data, variables, context, mutation) => {
         console.log("Mutation success:", mutation.options.mutationKey);
-        toast.success("Operation successful!");
+        // toast.success("Operation successful!");
       },
     }),
   });
@@ -38,7 +36,7 @@ export default function QueryProvider({ children }) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   );
 }

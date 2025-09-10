@@ -1,4 +1,5 @@
 import {
+  BookOpenText,
   Box,
   LayoutDashboard,
   MessageSquareText,
@@ -57,6 +58,27 @@ export const sidebarData = [
       {
         title: "Edit",
         url: "/products/:id/edit",
+        roles: [ROLES.ADMIN],
+        isVisible: false,
+      },
+    ],
+  },
+  {
+    title: "Books",
+    url: "/books?page=1&limit=10",
+    icon: BookOpenText,
+    roles: [ROLES.ADMIN],
+    isVisible: true,
+    items: [
+      {
+        title: "Create",
+        url: "/books/create",
+        roles: [ROLES.ADMIN],
+        isVisible: true,
+      },
+      {
+        title: "Edit",
+        url: "/books/:id/edit",
         roles: [ROLES.ADMIN],
         isVisible: false,
       },

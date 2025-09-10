@@ -5,13 +5,13 @@ import { Label } from "@/components/ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AlertCircle,
-  ExternalLink,
   LoaderCircleIcon,
   Plus,
   Trash,
   XIcon,
 } from "lucide-react";
 import {
+  Controller,
   FormProvider,
   useFieldArray,
   useForm,
@@ -31,30 +31,28 @@ import Image from "next/image";
 import config from "@/config";
 import { useCallback } from "react";
 import { Separator } from "../ui/separator";
-import ProductFeatures from "./product-features";
-import ProductSpecifications from "./product-specifications";
-import { ProductFormSchema } from "@/schemas/product-schema";
+import { toast } from "sonner";
 import {
-  useCreateProduct,
-  useProduct,
-  useUpdateProduct,
-} from "@/hooks/use-products";
-import ProductYouTubeURLs from "./product-youtube-urls";
+  useBook,
+  useCreateBook,
+  useFormattedBooks,
+  useUpdateBook,
+} from "@/hooks/use-books";
+import { bookFormSchema } from "@/schemas/book-schema";
+import CustomMultiSelect from "../custom-multi-select";
 
 const defaultValues = {
   pictures: [],
   title: "",
   description: "",
-  features: [{ image: null, title: "", description: "" }],
-  specifications: [{ title: "", description: "" }],
-  youtube_urls: [{ url: "" }],
   price: "",
+  related_books: [],
   meta_title: "",
   meta_description: "",
   meta_keywords: "",
 };
 
-export default function ProductForm({ id, type }) {
+export default function BookForm({ id, type }) {
   const router = useRouter();
   const [files, setFiles] = useState({
     pictures: [],
@@ -63,7 +61,7 @@ export default function ProductForm({ id, type }) {
     picture_urls: [],
   });
   const methods = useForm({
-    resolver: zodResolver(ProductFormSchema),
+    resolver: zodResolver(bookFormSchema),
     defaultValues,
   });
 
@@ -74,17 +72,28 @@ export default function ProductForm({ id, type }) {
     reset,
     watch,
     setError,
+    control,
   } = methods;
 
-  const createMutation = useCreateProduct(() => {
+  const createMutation = useCreateBook(() => {
     reset();
-    router.push("/products?page=1&limit=10");
+    router.push("/books?page=1&limit=10");
+    toast.success("Created.");
   });
-  const updateMutation = useUpdateProduct(id, () => {
+  const updateMutation = useUpdateBook(id, () => {
     reset();
-    router.push("/products?page=1&limit=10");
+    router.push("/books?page=1&limit=10");
+    toast.success("Updated.");
   });
-  const { data, isLoading, isError, error } = useProduct(id);
+
+  const { data, isLoading, isError, error } = useBook(id);
+  const {
+    data: bookOptions,
+    isLoading: isBookOptionsLoading,
+    isError: isBookOptionsError,
+    error: bookOptionsError,
+  } = useFormattedBooks("");
+
   const onSubmit = (data) => {
     if (!fileUrls?.picture_urls?.length && !files.pictures.length) {
       return setError("pictures", {
@@ -130,12 +139,14 @@ export default function ProductForm({ id, type }) {
       }));
       reset({
         ...data,
-        youtube_urls: data?.youtube_urls?.map((url) => ({
-          url: url,
-        })),
+        related_books: bookOptions
+          ? bookOptions?.filter(({ value }) =>
+              data?.related_books?.includes(value),
+            )
+          : [],
       });
     }
-  }, [data, type, reset]);
+  }, [data, type, reset, bookOptions, id]);
 
   const handlePictureChange = useCallback((data) => {
     setFiles((prev) => ({ ...prev, pictures: data }));
@@ -143,6 +154,7 @@ export default function ProductForm({ id, type }) {
 
   if (type === "edit" && isLoading) return <Loader />;
   if (type === "edit" && isError) return <ErrorMessage error={error} />;
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
@@ -228,22 +240,6 @@ export default function ProductForm({ id, type }) {
               )}
             </div>
 
-            {/*  min age */}
-            <div className="space-y-2">
-              <Label>Min Age *</Label>
-              <Input
-                type="number"
-                placeholder="Enter min age"
-                {...register(`min_age`, { valueAsNumber: true })}
-                className={cn({ "border-red-500": errors.min_age })}
-              />
-              {errors?.min_age && (
-                <span className="text-xs text-red-500">
-                  {errors.min_age?.message}
-                </span>
-              )}
-            </div>
-
             {/* description */}
             <div className="col-span-full space-y-2">
               <Label htmlFor="description">Description</Label>
@@ -259,31 +255,30 @@ export default function ProductForm({ id, type }) {
                 </span>
               )}
             </div>
+
+            <div className="col-span-full">
+              <Label htmlFor="related_books">Related books</Label>
+              <Controller
+                id="related_books"
+                control={control}
+                name="related_books"
+                render={({ field }) => {
+                  return (
+                    <CustomMultiSelect
+                      options={bookOptions?.filter(({ value }) => value !== id)}
+                      onChange={field.onChange}
+                      value={field.value}
+                      placeholder="Select related books"
+                      async={true}
+                      isLoading={isBookOptionsLoading}
+                      isError={isBookOptionsError}
+                      error={bookOptionsError}
+                    />
+                  );
+                }}
+              />
+            </div>
           </div>
-        </div>
-
-        <Separator className="col-span-full" />
-
-        {/* Features */}
-        <div className="space-y-4">
-          <h3 className="text-3xl font-semibold">Features</h3>
-          <ProductFeatures />
-        </div>
-
-        <Separator className="col-span-full" />
-
-        {/* YouTube Links */}
-        <div className="space-y-4">
-          <h3 className="text-3xl font-semibold">YouTube Links</h3>
-          <ProductYouTubeURLs />
-        </div>
-
-        <Separator className="col-span-full" />
-
-        {/* specification */}
-        <div className="space-y-4">
-          <h3 className="text-3xl font-semibold">Specification</h3>
-          <ProductSpecifications />
         </div>
 
         <Separator className="col-span-full" />
