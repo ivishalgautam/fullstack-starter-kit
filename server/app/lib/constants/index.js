@@ -44,6 +44,11 @@ const constants = {
   models: {
     USER_TABLE: "users",
     OTP_TABLE: "otps",
+    PRODUCT_TABLE: "products",
+    BOOK_TABLE: "books",
+    PAYMENT_TABLE: "payments",
+    ORDER_TABLE: "orders",
+    ORDER_ITEM_TABLE: "order_items",
   },
   bcrypt: {
     SALT_ROUNDS: 10,

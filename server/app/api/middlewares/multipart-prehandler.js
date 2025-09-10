@@ -1,4 +1,4 @@
-import { saveFile } from "../utils/file.js";
+import { saveFile } from "../../utils/file.js";
 
 export const multipartPreHandler = async (
   req,
@@ -25,4 +25,5 @@ export const multipartPreHandler = async (
   }
   req.body = body;
   req.filePaths = filePaths;
+  console.log({ body });
 };

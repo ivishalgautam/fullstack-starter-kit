@@ -139,7 +139,6 @@ const verifyUserCredentials = async (req, res) => {
     if (transaction) {
       await transaction.rollback();
     }
-    console.log(error);
     throw error;
   }
 };
@@ -293,34 +292,15 @@ const registerVerify = async (req, res) => {
 
     await table.OTPModel.update({ body: { verified: true } }, otpRecord.id);
     const userData = await table.UserModel.create(req, { transaction });
-    const freePlan = await table.PlanModel.getByFreePlan();
-    const currDate = moment();
-    const startDate = currDate.toISOString();
-    const endDate = currDate.add(7, "days");
-    await table.SubscriptionModel.create(
-      {
-        user_data: {
-          id: userData.id,
-        },
-        body: {
-          plan_id: freePlan.id,
-          plan_tier: freePlan.plan_tier,
-          start_date: startDate,
-          end_date: endDate,
-          duration_in_months: 0,
-        },
-      },
-      { transaction }
-    );
 
     await transaction.commit();
-    await Brevo.sendWelcomeEmail(
-      userData.email,
-      `${userData.first_name ?? ""} ${userData.last_name ?? ""}`
-    );
-    await waffly.sendWelcomeWhatsapp({
-      phone: userData.mobile_number,
-    });
+    // await Brevo.sendWelcomeEmail(
+    //   userData.email,
+    //   `${userData.first_name ?? ""} ${userData.last_name ?? ""}`
+    // );
+    // await waffly.sendWelcomeWhatsapp({
+    //   phone: userData.mobile_number,
+    // });
     res.send({ message: "User created successfully." });
   } catch (error) {
     await transaction.rollback();

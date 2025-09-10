@@ -38,10 +38,7 @@ const init = async (sequelize) => {
           msg: "Mobile number already in use.",
         },
       },
-      first_name: {
-        type: DataTypes.STRING,
-      },
-      last_name: {
+      fullname: {
         type: DataTypes.STRING,
       },
       password: {
@@ -54,7 +51,7 @@ const init = async (sequelize) => {
       },
       role: {
         type: DataTypes.ENUM({
-          values: ["super_admin", "admin", "dealer", "customer", "user"],
+          values: ["super_admin", "admin", "user"],
         }),
         defaultValue: "user",
       },
@@ -66,7 +63,7 @@ const init = async (sequelize) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      image_url: {
+      avatar: {
         type: DataTypes.STRING,
       },
       provider: {
@@ -104,12 +101,11 @@ const create = async (req, transaction) => {
     {
       username: req.body.username,
       password: hash_password,
-      first_name: req.body?.first_name,
-      last_name: req.body?.last_name,
+      fullname: req.body?.fullname,
       email: req.body?.email,
       mobile_number: req.body?.mobile_number,
       role: req.body?.role,
-      image_url: req?.body?.image_url,
+      avatar: req?.body?.avatar,
       provider: req?.body?.provider,
       provider_account_id: req?.body?.provider_account_id,
     },
@@ -127,7 +123,7 @@ const get = async (req) => {
 
   if (q) {
     whereConditions.push(
-      `(usr.first_name ILIKE :query OR usr.last_name ILIKE :query OR usr.email ILIKE :query)`
+      `(usr.fullname ILIKE :query OR usr.email ILIKE :query OR usr.username ILIKE :query)`
     );
     queryParams.query = `%${q}%`;
   }
@@ -148,7 +144,7 @@ const get = async (req) => {
 
   const query = `
   SELECT 
-    usr.id, CONCAT(usr.first_name, ' ', usr.last_name) as fullname, usr.username, 
+    usr.id, usr.fullname, usr.username, 
     usr.mobile_number, usr.email, usr.role, usr.is_active, usr.created_at
   FROM ${constants.models.USER_TABLE} usr
   ${whereClause}
@@ -182,7 +178,7 @@ const get = async (req) => {
 const getById = async (req, user_id) => {
   let query = `
   SELECT
-      usr.id, usr.username, usr.first_name, usr.last_name, usr.email, usr.blocked, usr.role, usr.mobile_number, usr.is_verified, usr.image_url
+      usr.id, usr.username, usr.fullname, usr.email, usr.blocked, usr.role, usr.mobile_number, usr.is_verified, usr.avatar
     FROM ${constants.models.USER_TABLE} usr
     WHERE usr.id = :user_id
   `;
@@ -199,8 +195,8 @@ const getById = async (req, user_id) => {
 const getByUsername = async (req, record = undefined) => {
   let query = `
   SELECT
-      usr.id, usr.username, usr.email, usr.first_name, usr.last_name, usr.password, 
-      usr.blocked, usr.role, usr.mobile_number, usr.is_verified, usr.image_url, usr.provider
+      usr.id, usr.username, usr.email, usr.fullname, usr.password, 
+      usr.blocked, usr.role, usr.mobile_number, usr.is_verified, usr.avatar, usr.provider
     FROM ${constants.models.USER_TABLE} usr
     WHERE usr.username = :username
   `;
@@ -238,13 +234,12 @@ const update = async (req, id, transaction = null) => {
       "id",
       "username",
       "email",
-      "first_name",
-      "last_name",
+      "fullname",
       "blocked",
       "role",
       "mobile_number",
       "is_verified",
-      "image_url",
+      "avatar",
     ],
     plain: true,
     transaction,
@@ -257,11 +252,10 @@ const update = async (req, id, transaction = null) => {
   return await UserModel.update(
     {
       email: req.body?.email,
-      first_name: req.body?.first_name,
-      last_name: req.body?.last_name,
+      fullname: req.body?.fullname,
       role: req.body?.role,
       mobile_number: req.body?.mobile_number,
-      image_url: req.body?.image_url,
+      avatar: req.body?.avatar,
       is_active: req.body?.is_active,
       is_verified: req.body?.is_verified,
     },
