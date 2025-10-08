@@ -47,14 +47,13 @@ export function DataTable({
 
   const [currentPage, setCurrentPage] = useQueryState(
     "page",
-    parseAsInteger.withOptions({ shallow: false }).withDefault(1)
+    parseAsInteger.withOptions({ shallow: false })
   );
 
   const [pageSize, setPageSize] = useQueryState(
     "limit",
     parseAsInteger
       .withOptions({ shallow: false, history: "push" })
-      .withDefault(10)
   );
 
   const paginationState = {
