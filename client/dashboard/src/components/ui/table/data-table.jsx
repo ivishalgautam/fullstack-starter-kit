@@ -34,7 +34,7 @@ import {
   DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
 import { parseAsInteger, useQueryState } from "nuqs";
-import React from "react";
+import React, { useEffect } from "react";
 
 export function DataTable({
   columns,
@@ -47,13 +47,12 @@ export function DataTable({
 
   const [currentPage, setCurrentPage] = useQueryState(
     "page",
-    parseAsInteger.withOptions({ shallow: false })
+    parseAsInteger.withOptions({ shallow: false }),
   );
 
   const [pageSize, setPageSize] = useQueryState(
     "limit",
-    parseAsInteger
-      .withOptions({ shallow: false, history: "push" })
+    parseAsInteger.withOptions({ shallow: false, history: "push" }),
   );
 
   const paginationState = {
@@ -63,6 +62,7 @@ export function DataTable({
 
   const pageCount = Math.ceil(totalItems / pageSize);
   const handlePaginationChange = (updaterOrValue) => {
+    console.log({ paginationState });
     const pagination =
       typeof updaterOrValue === "function"
         ? updaterOrValue(paginationState)
@@ -92,10 +92,16 @@ export function DataTable({
     manualFiltering: true,
   });
 
+  useEffect(() => {
+    if (currentPage < 1) {
+      setCurrentPage(1); // Ensure page is at least 1
+    }
+  }, [currentPage, setCurrentPage]);
+
   return (
-    <div className="flex flex-1 flex-col space-y-4">
-      <ScrollArea className="h-[calc(60vh)] rounded-xl border">
-        <Table>
+    <div className="flex h-[69vh] flex-1 flex-col space-y-4">
+      <ScrollArea className="rounded-xl border">
+        <Table className={""}>
           <TableHeader className="sticky top-0 z-10">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -105,7 +111,7 @@ export function DataTable({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -128,7 +134,7 @@ export function DataTable({
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -151,14 +157,14 @@ export function DataTable({
 
       <div className="flex flex-col items-center justify-end gap-2 space-x-2 py-4 sm:flex-row">
         <div className="flex w-full items-center justify-between">
-          <div className="flex-1 text-sm text-muted-foreground">
+          <div className="text-muted-foreground flex-1 text-start text-sm">
             {totalItems > 0 ? (
               <>
                 Showing{" "}
                 {paginationState.pageIndex * paginationState.pageSize + 1} to{" "}
                 {Math.min(
                   (paginationState.pageIndex + 1) * paginationState.pageSize,
-                  totalItems
+                  totalItems,
                 )}{" "}
                 of {totalItems} entries
               </>
@@ -169,7 +175,7 @@ export function DataTable({
 
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6 lg:gap-8">
             <div className="flex items-center space-x-2">
-              <p className="whitespace-nowrap text-sm font-medium">
+              <p className="text-sm font-medium whitespace-nowrap">
                 Rows per page
               </p>
               <Select
@@ -194,7 +200,7 @@ export function DataTable({
         </div>
 
         <div className="flex w-full items-center justify-between gap-2 sm:justify-end">
-          <div className="flex w-[150px] items-center justify-center text-sm font-medium">
+          <div className="flex items-center justify-center text-sm font-medium">
             {totalItems > 0 ? (
               <>
                 Page {paginationState.pageIndex + 1} of {table.getPageCount()}

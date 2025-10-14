@@ -23,7 +23,7 @@ export default function Layout({ children }) {
               <div className="flex flex-1">
                 <AppSidebar />
                 <SidebarInset className={"h-[calc(100%] overflow-hidden"}>
-                  <div className="h-full p-4">{children}</div>
+                  <div className="h-full p-4 pb-0">{children}</div>
                 </SidebarInset>
               </div>
             </SidebarProvider>
