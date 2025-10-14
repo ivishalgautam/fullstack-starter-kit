@@ -20,7 +20,7 @@ import Link from "next/link";
 export const columns = (updateMutation, setUserId, openModal) => [
   {
     accessorKey: "fullname",
-    header: "FULLNAME",
+    header: "Fullname",
     cell: ({ row }) => {
       const fullname = row.getValue("fullname");
       return <div className="capitalize">{fullname}</div>;
@@ -28,7 +28,7 @@ export const columns = (updateMutation, setUserId, openModal) => [
   },
   {
     accessorKey: "username",
-    header: "USERNAME",
+    header: "Username",
     cell: ({ row }) => {
       const username = row.getValue("username");
       return (
@@ -40,9 +40,7 @@ export const columns = (updateMutation, setUserId, openModal) => [
   },
   {
     accessorKey: "role",
-    header: ({ column }) => {
-      return <Button variant="ghost">ROLE</Button>;
-    },
+    header: "Role",
     cell: ({ row }) => {
       const role = row.getValue("role");
       return (
@@ -57,17 +55,15 @@ export const columns = (updateMutation, setUserId, openModal) => [
   },
   {
     accessorKey: "mobile_number",
-    header: "PHONE",
+    header: "Phone",
   },
   {
     accessorKey: "email",
-    header: "EMAIL",
+    header: "Email",
   },
   {
     accessorKey: "is_active",
-    header: ({ column }) => {
-      return <Button variant="ghost">STATUS</Button>;
-    },
+    header: "Status",
     cell: ({ row }) => {
       const is_active = row.getValue("is_active");
       const id = row.original.id;
@@ -90,9 +86,7 @@ export const columns = (updateMutation, setUserId, openModal) => [
   },
   {
     accessorKey: "created_at",
-    header: ({ column }) => {
-      return <Button variant="ghost">REGISTERED ON</Button>;
-    },
+    header: "Created On",
     cell: ({ row }) => {
       return (
         <div>{moment(row.getValue("created_at")).format("DD/MM/YYYY")}</div>

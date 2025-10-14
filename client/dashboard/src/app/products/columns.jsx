@@ -49,16 +49,7 @@ export const columns = (openModal, setId) => [
   },
   {
     accessorKey: "created_at",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          CREATED ON <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: "Created On",
     cell: ({ row }) => {
       return (
         <div>{moment(row.getValue("created_at")).format("DD/MM/YYYY")}</div>

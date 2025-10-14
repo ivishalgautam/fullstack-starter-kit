@@ -11,24 +11,23 @@ import Listing from "./_component/listing";
 import TableActions from "./_component/table-actions";
 
 export const metadata = {
-  title: "Products",
+  title: "Categories",
 };
 
-export default async function Books({ searchParams }) {
+export default async function Categories({ searchParams }) {
   searchParamsCache.parse(await searchParams);
   const key = serialize({ ...(await searchParams) });
 
   return (
     <PageContainer>
-      <div className="flex items-start justify-between gap-2">
+      <div className="flex items-start justify-between">
         <Heading
-          title="Books"
-          description="Manage books (Create, Update, Delete)."
+          title="Categories"
+          description="Manage categories (Create, Update, Delete)."
         />
-
         <Link
-          href={"/books/create"}
-          className={cn(buttonVariants({ size: "sm" }))}
+          href={"/categories/create"}
+          className={cn(buttonVariants({ variant: "outline" }), "h-7")}
         >
           <Plus /> Add
         </Link>

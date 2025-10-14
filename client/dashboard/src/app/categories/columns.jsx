@@ -7,58 +7,48 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Switch } from "@/components/ui/switch";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { rupee } from "@/lib/Intl";
 import moment from "moment";
 import Link from "next/link";
-import { ArrowUpDown } from "lucide-react";
 
-export const columns = (openModal, setId) => [
+export const columns = (openModal, setId, updateMutation) => [
   {
     accessorKey: "title",
-    header: ({ column }) => {
+    header: "Title",
+    cell: ({ row }) => {
+      const title = row.getValue("title");
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Title <ArrowUpDown />
-        </Button>
+        <div className="flex items-center justify-start gap-2 capitalize">
+          {title}
+        </div>
       );
     },
   },
   {
-    accessorKey: "price",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Price <ArrowUpDown />
-        </Button>
-      );
-    },
+    accessorKey: "featured",
+    header: "Featured",
     cell: ({ row }) => {
-      const amount = row.getValue("price");
-      return <Badge> {rupee.format(amount)}</Badge>;
+      const id = row.original.id;
+      const featured = row.getValue("featured");
+      return (
+        <div className="flex items-center justify-start gap-2">
+          <Switch
+            checked={featured}
+            onCheckedChange={() => {
+              setId(id);
+              setTimeout(() => updateMutation.mutate({ featured: !featured }));
+            }}
+          />
+        </div>
+      );
     },
   },
   {
     accessorKey: "created_at",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          CREATED ON <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: "Created on",
     cell: ({ row }) => {
       return (
         <div>{moment(row.getValue("created_at")).format("DD/MM/YYYY")}</div>
@@ -83,7 +73,7 @@ export const columns = (openModal, setId) => [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link href={`/books/${id}/edit`} className="w-full">
+              <Link href={`/categories/${id}/edit`} className="w-full">
                 Edit
               </Link>
             </DropdownMenuItem>

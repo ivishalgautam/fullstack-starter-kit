@@ -18,13 +18,13 @@ export default function QueryProvider({ children }) {
     queryCache: new QueryCache({
       onError: (error, query) => {
         console.error("Query failed:", query.queryKey, error);
-        handleError(error, "Failed to fetch data.");
+        // handleError(error, "Failed to fetch data.");
       },
     }),
     mutationCache: new MutationCache({
       onError: (error, variables, context, mutation) => {
         console.error("Mutation failed:", mutation.options.mutationKey, error);
-        handleError(error, "Failed to perform action.");
+        // handleError(error, "Failed to perform action.");
       },
       onSuccess: (data, variables, context, mutation) => {
         console.log("Mutation success:", mutation.options.mutationKey);

@@ -64,49 +64,25 @@ export const sidebarData = [
     ],
   },
   {
-    title: "Books",
-    url: "/books?page=1&limit=10",
+    title: "Categories",
+    url: "/categories?page=1&limit=10",
     icon: BookOpenText,
     roles: [ROLES.ADMIN],
     isVisible: true,
     items: [
       {
         title: "Create",
-        url: "/books/create",
+        url: "/categories/create",
         roles: [ROLES.ADMIN],
         isVisible: true,
       },
       {
         title: "Edit",
-        url: "/books/:id/edit",
+        url: "/categories/:id/edit",
         roles: [ROLES.ADMIN],
         isVisible: false,
       },
     ],
-  },
-  {
-    title: "Enquiries",
-    url: "/enquiries",
-    icon: MessageSquareText,
-    roles: [],
-    isVisible: true,
-    items: [],
-  },
-  {
-    title: "Queries",
-    url: "/queries",
-    icon: MessageSquareText,
-    roles: [],
-    isVisible: true,
-    items: [],
-  },
-  {
-    title: "Profile Overview",
-    url: "/profile",
-    icon: User,
-    roles: [],
-    isVisible: true,
-    items: [],
   },
 ];
 

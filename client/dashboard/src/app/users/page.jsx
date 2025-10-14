@@ -26,7 +26,10 @@ export default async function Users({ searchParams }) {
           title="Users"
           description="Manage users (Create, Update, Delete)."
         />
-        <Link href="/users/create" className={buttonVariants({})}>
+        <Link
+          href="/users/create"
+          className={buttonVariants({ size: "sm", variant: "outline" })}
+        >
           <Plus size="15" /> Add User
         </Link>
       </div>

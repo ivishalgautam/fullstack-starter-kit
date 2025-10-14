@@ -1,22 +1,30 @@
 "use client";
+
 import { DataTable } from "@/components/ui/table/data-table";
 import { DataTableSkeleton } from "@/components/ui/table/data-table-skeleton";
-import { useSearchParams } from "next/navigation";
+
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { columns } from "../columns";
 import { DeleteDialog } from "./delete-dialog";
+import {
+  useCategories,
+  useDeleteCategory,
+  useUpdateCategory,
+} from "@/hooks/use-categories";
 import ErrorMessage from "@/components/ui/error";
-import { useBooks, useDeleteBook } from "@/hooks/use-books";
 
 export default function Listing() {
   const [id, setId] = useState(null);
   const [isModal, setIsModal] = useState(false);
   const searchParams = useSearchParams();
   const searchParamsStr = searchParams.toString();
-  const { data, isLoading, isError, error } = useBooks(searchParamsStr);
-  const deleteMutation = useDeleteBook(id, () => {
+  const router = useRouter();
+  const { data, isLoading, isError, error } = useCategories(searchParamsStr);
+  const deleteMutation = useDeleteCategory(id, () => {
     setIsModal(false);
   });
+  const updateMutation = useUpdateCategory(id);
 
   const openModal = () => setIsModal(true);
 
@@ -26,8 +34,8 @@ export default function Listing() {
   return (
     <div className="border-input w-full rounded-lg">
       <DataTable
-        columns={columns(openModal, setId)}
-        data={data?.books ?? []}
+        columns={columns(openModal, setId, updateMutation)}
+        data={data?.categories ?? []}
         totalItems={data?.total ?? 0}
       />
       <DeleteDialog
