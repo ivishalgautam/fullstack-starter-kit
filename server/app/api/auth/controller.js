@@ -5,6 +5,7 @@ import hash from "../../lib/encryption/index.js";
 import table from "../../db/models.js";
 import authToken from "../../helpers/auth.js";
 import {
+  registerSchema,
   registerVerifySchema,
   userSchema,
 } from "../../validation-schema/user.schema.js";
@@ -139,6 +140,28 @@ const verifyUserCredentials = async (req, res) => {
     if (transaction) {
       await transaction.rollback();
     }
+    throw error;
+  }
+};
+
+const register = async (req, res) => {
+  const transaction = await sequelize.transaction();
+  try {
+    const validateData = registerSchema.parse(req.body);
+
+    const record = await table.UserModel.getByUsername(req);
+    if (record) {
+      return res.code(409).send({
+        message:
+          "User already exists with username. Please try with different username",
+      });
+    }
+
+    const user = await table.UserModel.create(req, transaction);
+    await transaction.commit();
+    res.send(user);
+  } catch (error) {
+    await transaction.rollback();
     throw error;
   }
 };
@@ -314,6 +337,7 @@ const verifyRefreshToken = async (req, res) => {
 
 export default {
   verifyUserCredentials: verifyUserCredentials,
+  register: register,
   registerRequest: registerRequest,
   registerVerify: registerVerify,
   verifyRefreshToken: verifyRefreshToken,

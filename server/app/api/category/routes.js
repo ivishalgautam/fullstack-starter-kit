@@ -1,5 +1,5 @@
 "use strict";
-import { multipartPreHandler } from "../middlewares/multipart-prehandler.js";
+import { multipartPreHandler } from "../../middlewares/multipart-prehandler.js";
 import controller from "./controller.js";
 
 export default async function routes(fastify, options) {
@@ -7,7 +7,7 @@ export default async function routes(fastify, options) {
     "/",
     {
       preHandler: async (req, res) =>
-        multipartPreHandler(req, res, ["related_books"]),
+        multipartPreHandler(req, res, ["packages"]),
     },
     controller.create
   );
@@ -15,7 +15,7 @@ export default async function routes(fastify, options) {
     "/:id",
     {
       preHandler: async (req, res) =>
-        multipartPreHandler(req, res, ["related_books", "picture_urls"]),
+        multipartPreHandler(req, res, ["packages", "picture_urls"]),
     },
     controller.updateById
   );
@@ -23,6 +23,6 @@ export default async function routes(fastify, options) {
   fastify.get("/:id", {}, controller.getById);
 }
 
-export async function bookPublicRoutes(fastify, opt) {
+export async function categoryPublicRoutes(fastify, opt) {
   fastify.get("/", {}, controller.get);
 }

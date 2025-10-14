@@ -1,7 +1,7 @@
 import jwtVerify from "../../helpers/auth.js";
 import userRoutes from "../../api/users/routes.js";
 import productRoutes from "../../api/products/routes.js";
-import bookRoutes from "../../api/book/routes.js";
+import categoryRoutes from "../../api/category/routes.js";
 
 export default async function routes(fastify, options) {
   fastify.addHook("onRequest", jwtVerify.verifyToken);
@@ -10,5 +10,5 @@ export default async function routes(fastify, options) {
   });
   fastify.register(userRoutes, { prefix: "users" });
   fastify.register(productRoutes, { prefix: "products" });
-  fastify.register(bookRoutes, { prefix: "books" });
+  fastify.register(categoryRoutes, { prefix: "categories" });
 }

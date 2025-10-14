@@ -49,6 +49,7 @@ const constants = {
     PAYMENT_TABLE: "payments",
     ORDER_TABLE: "orders",
     ORDER_ITEM_TABLE: "order_items",
+    CATEGORY_TABLE: "categories",
   },
   bcrypt: {
     SALT_ROUNDS: 10,

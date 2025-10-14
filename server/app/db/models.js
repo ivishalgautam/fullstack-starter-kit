@@ -1,5 +1,5 @@
 "use strict";
-import bookModel from "./models/book.model.js";
+import categoryModel from "./models/category.model.js";
 import orderItemModel from "./models/order-item.model.js";
 import orderModel from "./models/order.model.js";
 import otpModel from "./models/otp.model.js";
@@ -11,8 +11,8 @@ export default {
   UserModel: userModel,
   OTPModel: otpModel,
   ProductModel: productModel,
-  BookModel: bookModel,
   OrderModel: orderModel,
   OrderItemModel: orderItemModel,
   PaymentModel: paymentModel,
+  CategoryModel: categoryModel,
 };
