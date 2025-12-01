@@ -3,6 +3,7 @@ import { DataTableResetFilter } from "@/components/ui/table/data-table-reset-fil
 import { DataTableSearch } from "@/components/ui/table/data-table-search";
 import { useTableFilters } from "./use-table-filters";
 import { DataTableFilterBox } from "@/components/ui/table/data-table-filter-box";
+import { userRoles } from "@/data";
 
 export default function TableActions() {
   const {
@@ -23,13 +24,13 @@ export default function TableActions() {
         setSearchQuery={setSearchQuery}
         setPage={setPage}
       />
-      {/* <DataTableFilterBox
+      <DataTableFilterBox
         filterKey="role"
         title="Role"
-        options={[{ label: "User", value: "user" }]}
+        options={userRoles}
         setFilterValue={setRoleFilter}
         filterValue={roleFilter}
-      /> */}
+      />
       <DataTableResetFilter
         isFilterActive={isAnyFilterActive}
         onReset={resetFilters}

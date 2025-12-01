@@ -1,11 +1,13 @@
+import { userRoles } from "@/data";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { z } from "zod";
 
 export const userFormSchema = z
   .object({
-    role: z.enum(["admin", "user"], {
-      required_error: "Role is required.",
-    }),
+    role: z.enum(
+      userRoles.map(({ value }) => value),
+      { required_error: "Role is required." },
+    ),
     username: z
       .string()
       .min(3, "Username must be at least 3 characters")
@@ -34,9 +36,10 @@ export const userFormSchema = z
 
 export const userUpdateSchema = z
   .object({
-    role: z.enum(["admin", "user"], {
-      required_error: "Role is required.",
-    }),
+    role: z.enum(
+      userRoles.map(({ value }) => value),
+      { required_error: "Role is required." },
+    ),
     username: z
       .string()
       .min(3, { message: "Username must be at least 3 characters long" })

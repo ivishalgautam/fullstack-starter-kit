@@ -189,39 +189,42 @@ export default function TaskForm({ id, type = "create" }) {
         <Textarea {...register("description")} rows={3} />
       </div>
 
-      {/* Category */}
-      <div>
-        <Label>Category</Label>
-        <Controller
-          name="category_id"
-          control={control}
-          render={({ field }) => {
-            return (
-              <CommandMenu
-                data={categoriesData}
-                onChange={field.onChange}
-                value={field.value}
-                async={true}
-                isLoading={isCategoryLoading}
-                isError={categoryError}
-                error={categoryError}
-              />
-            );
-          }}
-        />
-      </div>
+      <div className="grid grid-cols-3 gap-3">
+        {/* Category */}
+        <div>
+          <Label>Category</Label>
+          <Controller
+            name="category_id"
+            control={control}
+            render={({ field }) => {
+              return (
+                <CommandMenu
+                  data={categoriesData}
+                  onChange={field.onChange}
+                  value={field.value}
+                  async={true}
+                  isLoading={isCategoryLoading}
+                  isError={categoryError}
+                  error={categoryError}
+                />
+              );
+            }}
+          />
+        </div>
 
-      {/* Due Date */}
-      <div>
-        <Label>Due Date</Label>
-        <Input type="date" {...register("due_date")} />
-        <Controller
-          name="due_date"
-          control={control}
-          render={({ field }) => {
-            return <DatePicker onChange={field.onChange} value={field.value} />;
-          }}
-        />
+        {/* Due Date */}
+        <div>
+          <Label>Due Date</Label>
+          <Controller
+            name="due_date"
+            control={control}
+            render={({ field }) => {
+              return (
+                <DatePicker onChange={field.onChange} value={field.value} />
+              );
+            }}
+          />
+        </div>
       </div>
 
       {/* Enums */}

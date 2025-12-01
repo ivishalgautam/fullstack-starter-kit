@@ -15,3 +15,14 @@ export const monthlyOptions = [
   })),
   { value: "LAST_DAY", label: "Last Day" },
 ];
+
+export const userRoles = [
+  {
+    value: "manager",
+    label: "Manager",
+  },
+  {
+    value: "employee",
+    label: "Employee",
+  },
+];

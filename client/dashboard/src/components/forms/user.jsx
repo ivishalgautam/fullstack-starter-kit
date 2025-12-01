@@ -8,7 +8,6 @@ import { AlertCircle, Eye, EyeOff, LoaderCircle } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import PhoneSelect from "../ui/phone-input";
-import { toast } from "sonner";
 import {
   Select,
   SelectContent,
@@ -25,6 +24,7 @@ import { useEffect } from "react";
 import Loader from "../loader";
 import ErrorMessage from "../ui/error";
 import { useRouter } from "next/navigation";
+import { userRoles } from "@/data";
 
 export default function UserForm({ id, type }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -110,8 +110,13 @@ export default function UserForm({ id, type }) {
                     <SelectValue placeholder="Select a role" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="admin">Admin</SelectItem>
-                    <SelectItem value="user">User</SelectItem>
+                    {userRoles.map((role) => {
+                      return (
+                        <SelectItem key={role.value} value={role.value}>
+                          {role.label}
+                        </SelectItem>
+                      );
+                    })}
                   </SelectContent>
                 </Select>
               );
