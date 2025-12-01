@@ -84,6 +84,27 @@ export const sidebarData = [
       },
     ],
   },
+  {
+    title: "Tasks",
+    url: "/tasks?page=1&limit=10",
+    icon: BookOpenText,
+    roles: [ROLES.ADMIN],
+    isVisible: true,
+    items: [
+      {
+        title: "Create",
+        url: "/tasks/create",
+        roles: [ROLES.ADMIN],
+        isVisible: true,
+      },
+      {
+        title: "Edit",
+        url: "/tasks/:id/edit",
+        roles: [ROLES.ADMIN],
+        isVisible: false,
+      },
+    ],
+  },
 ];
 
 export const publicRoutes = ["/", "/admin", "/register"];

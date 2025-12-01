@@ -17,4 +17,5 @@ export const endpoints = {
   users: { getAll: "/users" },
   products: { getAll: "/products" },
   categories: { getAll: "/categories" },
+  tasks: { getAll: "/tasks" },
 };
