@@ -17,8 +17,8 @@ import {
 } from "../ui/select";
 import { cn } from "@/lib/utils";
 import { Alert, AlertDescription } from "../ui/alert";
-import { useCreateUser, useGetUser } from "@/hooks/user-queries";
-import { useUpdateUser } from "../../hooks/user-queries";
+import { useCreateUser, useGetUser } from "@/hooks/use-users";
+import { useUpdateUser } from "../../hooks/use-users";
 import { getFormErrors } from "@/lib/get-form-errors";
 import { useEffect } from "react";
 import Loader from "../loader";

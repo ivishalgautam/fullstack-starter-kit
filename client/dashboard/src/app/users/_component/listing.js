@@ -13,11 +13,7 @@ import { Button } from "@/components/ui/button";
 import ErrorMessage from "@/components/ui/error";
 import { DataTable } from "@/components/ui/table/data-table";
 import { DataTableSkeleton } from "@/components/ui/table/data-table-skeleton";
-import {
-  useDeleteUser,
-  useGetUsers,
-  useUpdateUser,
-} from "@/hooks/user-queries";
+import { useDeleteUser, useGetUsers, useUpdateUser } from "@/hooks/use-users";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { columns } from "../columns";

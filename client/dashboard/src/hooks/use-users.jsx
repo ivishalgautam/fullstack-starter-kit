@@ -10,6 +10,21 @@ export const useGetUsers = (searchParams = "page=1") => {
   });
 };
 
+export const useFormattedUsers = (searchParams = "page=1") => {
+  return useQuery({
+    queryKey: ["users", searchParams],
+    queryFn: () => user.get(searchParams),
+    select: ({ users }) => {
+      return (
+        users?.map((user) => ({
+          value: user.id,
+          label: `${user.fullname} (${user.role})`,
+        })) ?? []
+      );
+    },
+  });
+};
+
 export const useGetUserProfile = (id) => {
   return useQuery({
     queryKey: ["users", id],

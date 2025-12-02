@@ -108,3 +108,4 @@ export const sidebarData = [
 ];
 
 export const publicRoutes = ["/", "/admin", "/register"];
+

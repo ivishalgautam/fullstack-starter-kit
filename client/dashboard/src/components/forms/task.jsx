@@ -7,7 +7,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { Checkbox } from "../ui/checkbox";
-import { Loader2, XIcon } from "lucide-react";
+import { ExternalLink, Loader2, XIcon } from "lucide-react";
 import Image from "next/image";
 import FileUpload from "../file-uploader";
 import Loader from "../loader";
@@ -22,13 +22,26 @@ import { useCreateTask, useTask, useUpdateTask } from "@/hooks/use-task";
 import CustomSelect from "../custom-select";
 import CustomMultiSelect from "../custom-multi-select";
 import { days, monthlyOptions } from "@/data";
-import { useCategories, useFormattedCategories } from "@/hooks/use-categories";
+import { useFormattedCategories } from "@/hooks/use-categories";
 import CommandMenu from "../command-menu";
 import { DatePicker } from "../ui/date-picker";
+import { useFormattedUsers } from "@/hooks/use-users";
+import { H3 } from "../ui/typography";
+import { DateTimePickerForm } from "../ui/date-time-picker";
 
 export default function TaskForm({ id, type = "create" }) {
-  const [files, setFiles] = useState({ attachments: [] });
-  const [fileUrls, setFileUrls] = useState({ attachments: [] });
+  const [files, setFiles] = useState({
+    image: [],
+    pdf: [],
+    audio: [],
+  });
+  const [fileUrls, setFileUrls] = useState({
+    image_urls: [],
+    pdf_urls: [],
+    audio_urls: [],
+  });
+
+  const [userSearch, setUserSearch] = useState("");
 
   const {
     register,
@@ -56,19 +69,20 @@ export default function TaskForm({ id, type = "create" }) {
 
   const {
     data: categoriesData,
-    isLoading: isCategoryLoading,
-    isError: isCategoryError,
-    error: categoryError,
+    isLoading: isCategoriesLoading,
+    isError: isCategoriesError,
+    error: categoriesError,
   } = useFormattedCategories("");
 
+  const {
+    data: usersData,
+    isLoading: isUsersLoading,
+    isError: isUsersError,
+    error: usersError,
+  } = useFormattedUsers("role=manager.employee");
   const frequency = watch("frequency");
 
   const onSubmit = (form) => {
-    if (!fileUrls.attachments.length && !files.attachments.length) {
-      toast.warning("At least 1 attachment is required");
-      return setError("attachments", { type: "manual", message: "Required*" });
-    }
-
     const formData = new FormData();
 
     Object.entries(files).forEach(([key, value]) => {
@@ -117,6 +131,9 @@ export default function TaskForm({ id, type = "create" }) {
       setFileUrls((prev) => ({
         ...prev,
         attachments: data.attachments ?? [],
+        image_urls: data?.image ?? [],
+        pdf_urls: data?.pdf ?? [],
+        audio_urls: data?.audio ?? [],
       }));
     }
   }, [data, reset]);
@@ -130,66 +147,27 @@ export default function TaskForm({ id, type = "create" }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      {/* Attachments */}
-      <div className="space-y-3">
-        <Label>Attachments</Label>
-        <FileUpload
-          onFileChange={handleAttachmentChange}
-          inputName="attachments"
-          multiple
-          maxFiles={50}
-          className={cn({ "border-red-500": errors.attachments })}
-        />
+      <div className="grid gap-3 md:grid-cols-3">
+        {/* Title */}
+        <div>
+          <Label>Title</Label>
+          <Input
+            {...register("title")}
+            className={cn({ "border-red-500": errors.title })}
+            placeholder="Enter title"
+          />
+        </div>
 
-        {fileUrls.attachments?.length > 0 && (
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-3">
-            {fileUrls.attachments.map((file, idx) => (
-              <div
-                key={idx}
-                className="bg-accent relative aspect-square w-24 rounded-md"
-              >
-                <Image
-                  src={`${config.file_base}/${file}`}
-                  width={200}
-                  height={200}
-                  alt="file"
-                  className="rounded-md object-cover"
-                />
-                <Button
-                  size="icon"
-                  type="button"
-                  className="absolute -top-2 -right-2 size-6 rounded-full border"
-                  onClick={() =>
-                    setFileUrls((prev) => ({
-                      ...prev,
-                      attachments: prev.attachments.filter((f) => f !== file),
-                    }))
-                  }
-                >
-                  <XIcon className="size-4" />
-                </Button>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+        {/* Description */}
+        <div className="col-span-full">
+          <Label>Description</Label>
+          <Textarea
+            {...register("description")}
+            rows={3}
+            placeholder="Enter description"
+          />
+        </div>
 
-      {/* Title */}
-      <div>
-        <Label>Title</Label>
-        <Input
-          {...register("title")}
-          className={cn({ "border-red-500": errors.title })}
-        />
-      </div>
-
-      {/* Description */}
-      <div>
-        <Label>Description</Label>
-        <Textarea {...register("description")} rows={3} />
-      </div>
-
-      <div className="grid grid-cols-3 gap-3">
         {/* Category */}
         <div>
           <Label>Category</Label>
@@ -203,9 +181,9 @@ export default function TaskForm({ id, type = "create" }) {
                   onChange={field.onChange}
                   value={field.value}
                   async={true}
-                  isLoading={isCategoryLoading}
-                  isError={categoryError}
-                  error={categoryError}
+                  isLoading={isCategoriesLoading}
+                  isError={isCategoriesError}
+                  error={categoriesError}
                 />
               );
             }}
@@ -213,22 +191,24 @@ export default function TaskForm({ id, type = "create" }) {
         </div>
 
         {/* Due Date */}
-        <div>
+        <div className="md:col-span-2">
           <Label>Due Date</Label>
           <Controller
             name="due_date"
             control={control}
             render={({ field }) => {
               return (
-                <DatePicker onChange={field.onChange} value={field.value} />
+                <DateTimePickerForm
+                  onChange={field.onChange}
+                  value={field.value}
+                />
               );
             }}
           />
         </div>
-      </div>
 
-      {/* Enums */}
-      <div className="grid grid-cols-3 gap-3">
+        {/* Enums */}
+        {/* priority */}
         <div>
           <Label>Priority</Label>
           <Controller
@@ -250,6 +230,8 @@ export default function TaskForm({ id, type = "create" }) {
             }}
           />
         </div>
+
+        {/* status */}
         <div>
           <Label>Status</Label>
           <Controller
@@ -274,9 +256,50 @@ export default function TaskForm({ id, type = "create" }) {
           />
         </div>
 
+        {/* assigned to */}
         <div>
-          <Label>Assigned To (UUID)</Label>
-          <Input {...register("assigned_to")} />
+          <Label>Assigned To</Label>
+          <Controller
+            name="assigned_to"
+            control={control}
+            render={({ field }) => {
+              return (
+                <CustomMultiSelect
+                  options={usersData}
+                  async
+                  isLoading={isUsersLoading}
+                  isError={isUsersError}
+                  error={usersError}
+                  onChange={field.onChange}
+                  value={field.value}
+                  placeholder="Select users"
+                />
+              );
+            }}
+          />
+        </div>
+
+        {/* in loop */}
+        <div>
+          <Label>In loop</Label>
+          <Controller
+            name="in_loop"
+            control={control}
+            render={({ field }) => {
+              return (
+                <CustomMultiSelect
+                  options={usersData}
+                  async
+                  isLoading={isUsersLoading}
+                  isError={isUsersError}
+                  error={usersError}
+                  onChange={field.onChange}
+                  value={field.value}
+                  placeholder="Select users"
+                />
+              );
+            }}
+          />
         </div>
       </div>
 
@@ -356,9 +379,159 @@ export default function TaskForm({ id, type = "create" }) {
             )}
 
             <Label>Recurrence End Date</Label>
-            <Input type="date" {...register("end_date")} />
+            <Controller
+              name="end_date"
+              control={control}
+              render={({ field }) => {
+                return (
+                  <DateTimePickerForm
+                    onChange={field.onChange}
+                    value={field.value}
+                  />
+                );
+              }}
+            />
           </>
         )}
+      </div>
+
+      {/* attachments */}
+      <div className="space-y-2">
+        <H3>Attachments</H3>
+        <div className="grid gap-3 md:grid-cols-3">
+          {/* Images */}
+          <div className="space-y-4">
+            <Label>Image</Label>
+            <Input
+              type="file"
+              multiple
+              onChange={(e) =>
+                setFiles((prev) => ({
+                  ...prev,
+                  image: Array.from(e.target.files),
+                }))
+              }
+              className={cn({ "border-destructive": errors.image })}
+            />
+            <div className="flex flex-wrap items-center justify-start gap-2">
+              {fileUrls?.image_urls?.map((file, index) => (
+                <div
+                  key={index}
+                  className="hover:bg-muted/50 relative flex items-center justify-between rounded-lg border px-3 py-2 text-sm"
+                >
+                  <div className="flex min-w-0 flex-1 items-center gap-2">
+                    <a href={`${config.file_base}/${file}`} target="_blank">
+                      <ExternalLink className="h-4 w-4" />
+                    </a>
+                    <span className="truncate">{file.split("\\").pop()}</span>
+                  </div>
+                  <Button
+                    onClick={() =>
+                      setFileUrls((prev) => ({
+                        ...prev,
+                        image_urls: prev.image_urls.filter((i) => i !== file),
+                      }))
+                    }
+                    size="icon"
+                    className="border-background focus-visible:border-background absolute -top-2 -right-2 size-6 rounded-full border-2 shadow-none"
+                    aria-label="Remove image"
+                    type="button"
+                  >
+                    <XIcon className="size-3.5" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* pdf */}
+          <div className="space-y-4">
+            <Label>PDF</Label>
+            <Input
+              type="file"
+              multiple
+              onChange={(e) =>
+                setFiles((prev) => ({
+                  ...prev,
+                  pdf: Array.from(e.target.files),
+                }))
+              }
+              className={cn({ "border-destructive": errors.pdf })}
+            />
+            <div className="flex flex-wrap items-center justify-start gap-2">
+              {fileUrls?.pdf_urls?.map((file, index) => (
+                <div
+                  key={index}
+                  className="hover:bg-muted/50 relative flex items-center justify-between rounded-lg border px-3 py-2 text-sm"
+                >
+                  <div className="flex min-w-0 flex-1 items-center gap-2">
+                    <a>
+                      <ExternalLink className="h-4 w-4" />
+                    </a>
+                    <span className="truncate">{file.split("\\").pop()}</span>
+                  </div>
+                  <Button
+                    onClick={() =>
+                      setFileUrls((prev) => ({
+                        ...prev,
+                        pdf_urls: prev.pdf_urls.filter((i) => i !== file),
+                      }))
+                    }
+                    size="icon"
+                    className="border-background focus-visible:border-background absolute -top-2 -right-2 size-6 rounded-full border-2 shadow-none"
+                    aria-label="Remove image"
+                    type="button"
+                  >
+                    <XIcon className="size-3.5" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* audio */}
+          <div className="space-y-4">
+            <Label>Audio</Label>
+            <Input
+              type="file"
+              multiple
+              onChange={(e) =>
+                setFiles((prev) => ({
+                  ...prev,
+                  audio: Array.from(e.target.files),
+                }))
+              }
+              className={cn({ "border-destructive": errors.audio })}
+            />
+            <div className="flex flex-wrap items-center justify-start gap-2">
+              {fileUrls?.audio_urls?.map((file, index) => (
+                <div
+                  key={index}
+                  className="hover:bg-muted/50 relative flex items-center justify-between rounded-lg border px-3 py-2 text-sm"
+                >
+                  <div className="flex min-w-0 flex-1 items-center gap-2">
+                    <a>
+                      <ExternalLink className="h-4 w-4" />
+                    </a>
+                    <span className="truncate">{file.split("\\").pop()}</span>
+                  </div>
+                  <Button
+                    onClick={() =>
+                      setFileUrls((prev) => ({
+                        ...prev,
+                        audio_urls: prev.audio_urls.filter((i) => i !== file),
+                      }))
+                    }
+                    size="icon"
+                    className="border-background focus-visible:border-background absolute -top-2 -right-2 size-6 rounded-full border-2 shadow-none"
+                    aria-label="Remove image"
+                    type="button"
+                  >
+                    <XIcon className="size-3.5" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Submit */}

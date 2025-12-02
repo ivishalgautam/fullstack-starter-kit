@@ -59,10 +59,13 @@ function removePickedOption(groupOption, picked) {
 }
 
 function isOptionsExist(groupOption, targetOption) {
+  console.log("object");
   for (const [, value] of Object.entries(groupOption)) {
-    if (
-      value.some((option) => targetOption.find((p) => p.value === option.value))
-    ) {
+    const isExist = value.some((option) =>
+      targetOption.find((p) => p.value === option.value),
+    );
+
+    if (isExist) {
       return true;
     }
   }

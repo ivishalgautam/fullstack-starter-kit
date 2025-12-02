@@ -19,11 +19,11 @@ export default function CustomMultiSelect({
   return (
     <MultipleSelector
       options={options}
+      defaultOptions={[]}
       commandProps={{
         label: placeholder,
       }}
       value={value}
-      defaultOptions={[]}
       placeholder={placeholder}
       hideClearAllButton
       hidePlaceholderWhenSelected
