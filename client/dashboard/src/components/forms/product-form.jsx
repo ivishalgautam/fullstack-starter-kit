@@ -228,22 +228,6 @@ export default function ProductForm({ id, type }) {
               )}
             </div>
 
-            {/*  min age */}
-            <div className="space-y-2">
-              <Label>Min Age *</Label>
-              <Input
-                type="number"
-                placeholder="Enter min age"
-                {...register(`min_age`, { valueAsNumber: true })}
-                className={cn({ "border-red-500": errors.min_age })}
-              />
-              {errors?.min_age && (
-                <span className="text-xs text-red-500">
-                  {errors.min_age?.message}
-                </span>
-              )}
-            </div>
-
             {/* description */}
             <div className="col-span-full space-y-2">
               <Label htmlFor="description">Description</Label>
@@ -260,30 +244,6 @@ export default function ProductForm({ id, type }) {
               )}
             </div>
           </div>
-        </div>
-
-        <Separator className="col-span-full" />
-
-        {/* Features */}
-        <div className="space-y-4">
-          <h3 className="text-3xl font-semibold">Features</h3>
-          <ProductFeatures />
-        </div>
-
-        <Separator className="col-span-full" />
-
-        {/* YouTube Links */}
-        <div className="space-y-4">
-          <h3 className="text-3xl font-semibold">YouTube Links</h3>
-          <ProductYouTubeURLs />
-        </div>
-
-        <Separator className="col-span-full" />
-
-        {/* specification */}
-        <div className="space-y-4">
-          <h3 className="text-3xl font-semibold">Specification</h3>
-          <ProductSpecifications />
         </div>
 
         <Separator className="col-span-full" />
