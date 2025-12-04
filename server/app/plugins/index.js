@@ -25,6 +25,6 @@ export default async function registerPlugins(app) {
   await app.register(swagger);
   await app.register(db);
   await app.register(publicRoutes, { prefix: "v1" });
-  await app.register(authRoutes, { prefix: "v1" });
+  await app.register(authRoutes, { prefix: "v1/auth" });
   await app.register(routes, { prefix: "v1" });
 }

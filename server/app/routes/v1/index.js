@@ -1,6 +1,6 @@
 import jwtVerify from "../../helpers/auth.js";
 import userRoutes from "../../api/users/routes.js";
-import productRoutes from "../../api/products/routes.js";
+import productRoutes from "../../api/product/routes.js";
 import categoryRoutes from "../../api/category/routes.js";
 
 export default async function routes(fastify, options) {
