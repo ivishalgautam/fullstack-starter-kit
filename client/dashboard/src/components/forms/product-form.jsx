@@ -5,7 +5,6 @@ import { Label } from "@/components/ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AlertCircle,
-  ExternalLink,
   LoaderCircleIcon,
   Plus,
   Trash,
@@ -31,15 +30,12 @@ import Image from "next/image";
 import config from "@/config";
 import { useCallback } from "react";
 import { Separator } from "../ui/separator";
-import ProductFeatures from "./product-features";
-import ProductSpecifications from "./product-specifications";
 import { ProductFormSchema } from "@/schemas/product-schema";
 import {
   useCreateProduct,
   useProduct,
   useUpdateProduct,
 } from "@/hooks/use-products";
-import ProductYouTubeURLs from "./product-youtube-urls";
 
 const defaultValues = {
   pictures: [],
