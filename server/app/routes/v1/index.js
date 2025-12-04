@@ -8,6 +8,7 @@ export default async function routes(fastify, options) {
   fastify.addHook("preHandler", async (request, reply) => {
     request.body && console.log("body", request.body);
   });
+  //
   fastify.register(userRoutes, { prefix: "users" });
   fastify.register(productRoutes, { prefix: "products" });
   fastify.register(categoryRoutes, { prefix: "categories" });
